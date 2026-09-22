@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Webshop — Zoet Gebaar</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="nav">
+    <a class="brand" href="index.html">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none">
+        <path d="M11 16h18l-1.5 18a3 3 0 0 1-3 2.7H15.5a3 3 0 0 1-3-2.7L11 16Z" fill="var(--berry)"/>
+        <rect x="9" y="11" width="22" height="6" rx="2" fill="var(--berry-deep)"/>
+        <path d="M15 14c1.5-3 3-4 5-4s3.5 1 5 4" stroke="var(--gold)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">Zoet Gebaar</span>
+    </a>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a href="webshop.html" aria-current="page">Webshop</a>
+      <a href="over-ons.html">Over ons</a>
+    </nav>
+    <a class="cta" href="#assortiment">Naar het assortiment</a>
+    <button class="menu-toggle" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </header>
+
+  <section class="page-hero">
+    <p class="kicker">Webshop</p>
+    <h1>Kies een pot, wij<br>maken het persoonlijk.</h1>
+    <p>Vier producten, geen ingewikkelde keuzes: formaat en snoepmix. De rest — vullen, strikken, verzenden — doen wij.</p>
+  </section>
+
+  <section id="assortiment" style="padding-top:8px;">
+    <div class="shop-toolbar">
+      <div class="filter-row" role="group" aria-label="Filter op snoepmix">
+        <button class="filter-chip" data-filter="alle" aria-pressed="true">Alle potten</button>
+        <button class="filter-chip" data-filter="gewoon" aria-pressed="false">Gewone mix</button>
+        <button class="filter-chip" data-filter="gelatinevrij" aria-pressed="false">Zonder gelatine</button>
+      </div>
+      <span style="font-size:12.5px;color:var(--ink-soft);">4 producten</span>
+    </div>
+
+    <div class="tag-grid">
+
+      <div class="tag-card shop-card" data-mix="gewoon">
+        <svg viewBox="0 0 60 70"><path d="M14 24h32l-4 38a5 5 0 0 1-5 4.5H23a5 5 0 0 1-5-4.5L14 24Z" fill="var(--page-bg)"/><rect x="12" y="17" width="36" height="8" rx="2" fill="var(--page-bg)"/><path d="M10 24c0-3 3-5 7-5h26c4 0 7 2 7 5v3c0 3-3 5-7 5H17c-4 0-7-2-7-5v-3Z" fill="var(--berry)"/><circle cx="26" cy="42" r="3" fill="var(--gold)"/><circle cx="36" cy="50" r="3" fill="var(--sage)"/><circle cx="30" cy="58" r="3" fill="var(--berry)"/></svg>
+        <h3>Kleine pot</h3>
+        <p class="desc">Handgevuld, klein formaat — een bedankje of een klein extraatje.</p>
+        <div class="p-tags"><span class="tag mix-gewoon">Gewone mix</span><span class="tag">Klein</span></div>
+        <div class="price-line">
+          <span class="price">prijs volgt</span>
+          <button class="add-btn" data-added="false">In winkelmandje</button>
+        </div>
+      </div>
+
+      <div class="tag-card shop-card" data-mix="gelatinevrij">
+        <svg viewBox="0 0 60 70"><path d="M14 24h32l-4 38a5 5 0 0 1-5 4.5H23a5 5 0 0 1-5-4.5L14 24Z" fill="var(--page-bg)"/><rect x="12" y="17" width="36" height="8" rx="2" fill="var(--page-bg)"/><path d="M10 24c0-3 3-5 7-5h26c4 0 7 2 7 5v3c0 3-3 5-7 5H17c-4 0-7-2-7-5v-3Z" fill="var(--sage)"/><circle cx="26" cy="42" r="3" fill="var(--gold)"/><circle cx="36" cy="50" r="3" fill="var(--berry)"/><circle cx="30" cy="58" r="3" fill="var(--gold)"/></svg>
+        <h3>Kleine pot</h3>
+        <p class="desc">Zelfde klein formaat, gevuld met onze snoepmix zonder gelatine.</p>
+        <div class="p-tags"><span class="tag mix-vrij">Zonder gelatine</span><span class="tag">Klein</span></div>
+        <div class="price-line">
+          <span class="price">prijs volgt</span>
+          <button class="add-btn" data-added="false">In winkelmandje</button>
+        </div>
+      </div>
+
+      <div class="tag-card shop-card" data-mix="gewoon">
+        <svg viewBox="0 0 60 70"><path d="M10 20h40l-5 44a5 5 0 0 1-5 4.5H20a5 5 0 0 1-5-4.5L10 20Z" fill="var(--page-bg)"/><rect x="8" y="12" width="44" height="9" rx="2" fill="var(--page-bg)"/><path d="M6 20c0-3.5 3.5-6 8-6h32c4.5 0 8 2.5 8 6v3c0 3.5-3.5 6-8 6H14c-4.5 0-8-2.5-8-6v-3Z" fill="var(--berry)"/><circle cx="22" cy="40" r="3.4" fill="var(--gold)"/><circle cx="34" cy="48" r="3.4" fill="var(--sage)"/><circle cx="26" cy="58" r="3.4" fill="var(--berry)"/><circle cx="38" cy="60" r="3.4" fill="var(--gold)"/></svg>
+        <h3>Grote pot</h3>
+        <p class="desc">Groter formaat, voor wie liever wat meer geeft — of langer van geniet.</p>
+        <div class="p-tags"><span class="tag mix-gewoon">Gewone mix</span><span class="tag">Groot</span></div>
+        <div class="price-line">
+          <span class="price">prijs volgt</span>
+          <button class="add-btn" data-added="false">In winkelmandje</button>
+        </div>
+      </div>
+
+      <div class="tag-card shop-card" data-mix="gelatinevrij">
+        <svg viewBox="0 0 60 70"><path d="M10 20h40l-5 44a5 5 0 0 1-5 4.5H20a5 5 0 0 1-5-4.5L10 20Z" fill="var(--page-bg)"/><rect x="8" y="12" width="44" height="9" rx="2" fill="var(--page-bg)"/><path d="M6 20c0-3.5 3.5-6 8-6h32c4.5 0 8 2.5 8 6v3c0 3.5-3.5 6-8 6H14c-4.5 0-8-2.5-8-6v-3Z" fill="var(--sage)"/><circle cx="22" cy="40" r="3.4" fill="var(--gold)"/><circle cx="34" cy="48" r="3.4" fill="var(--berry)"/><circle cx="26" cy="58" r="3.4" fill="var(--gold)"/><circle cx="38" cy="60" r="3.4" fill="var(--berry)"/></svg>
+        <h3>Grote pot</h3>
+        <p class="desc">Groot formaat, zonder gelatine — zodat ook deze klanten volop kunnen kiezen.</p>
+        <div class="p-tags"><span class="tag mix-vrij">Zonder gelatine</span><span class="tag">Groot</span></div>
+        <div class="price-line">
+          <span class="price">prijs volgt</span>
+          <button class="add-btn" data-added="false">In winkelmandje</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="note-box" style="margin-top:26px;">
+      Prijzen liggen nog niet vast — die volgen zodra de inkoopkost van potten, snoep, lint en kaartjes bekend is. Dit is een ontwerp-POC, geen werkende bestelmodule.
+    </div>
+  </section>
+
+  <section id="seizoenen">
+    <div class="section-head">
+      <p class="kicker">Seizoensafwerking</p>
+      <h2>Zelfde vier potten, andere jas</h2>
+    </div>
+    <div class="season-strip">
+      <div class="season-card">
+        <div class="ribbon-tab kerst">Vanaf 1 december</div>
+        <div class="season-body"><h3>Kerst</h3><p>Rood, groen en goud lint met een kerstkaartje.</p></div>
+      </div>
+      <div class="season-card">
+        <div class="ribbon-tab valentijn">Februari</div>
+        <div class="season-body"><h3>Valentijn</h3><p>Rood en roze lint, kaartje voor een lief of vriend(in).</p></div>
+      </div>
+      <div class="season-card">
+        <div class="ribbon-tab pasen">Tot 31 maart</div>
+        <div class="season-body"><h3>Pasen</h3><p>Pastelkleuren en een paaskaartje als laatste collectie.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="bestellen">
+    <div class="section-head">
+      <p class="kicker">Zo bestel je</p>
+      <h2>Van keuze tot aan de deur</h2>
+      <p>Nog geen live afrekenen — wel het volledige traject al in beeld.</p>
+    </div>
+    <div class="step-row">
+      <div class="step"><span class="ticket">Stap 1</span><div><h3>Kies je pot</h3><p>Formaat en mix selecteren in de webshop.</p></div></div>
+      <div class="step"><span class="ticket">Stap 2</span><div><h3>Persoonlijk woordje</h3><p>Optioneel een boodschap doorgeven voor het kaartje.</p></div></div>
+      <div class="step"><span class="ticket">Stap 3</span><div><h3>Wij vullen &amp; strikken</h3><p>Elke pot wordt met de hand afgewerkt.</p></div></div>
+      <div class="step"><span class="ticket">Stap 4</span><div><h3>Levering of afhaal</h3><p>Verzending, of ophalen op een markt bij jou in de buurt.</p></div></div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="band band-ink">
+  <div class="wrap">
+    <div>
+      <div class="makers">Zoet Gebaar</div>
+      <div>Mini-onderneming van Aylien, Shaunie &amp; Aelis · 1 dec – 31 mrt</div>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="webshop.html">Webshop</a>
+      <a href="over-ons.html">Over ons</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="cart-pill">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L20 8H6"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg>
+  <span><span class="count">0</span> in winkelmandje</span>
+</div>
+
+<script src="site.js"></script>
+</body>
+</html>
