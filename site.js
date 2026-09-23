@@ -45,9 +45,18 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch { /* The wishlist also works in memory when browser storage is unavailable. */ }
   const pill = document.querySelector('.cart-pill');
   const status = document.querySelector('#shop-status');
+  // Support a cached page that still renders the old button instead of a link.
+  if (pill.tagName === 'BUTTON') {
+    pill.addEventListener('click', () => {
+      const target = new URL('bestellen.html', location.href);
+      target.searchParams.set('v', '20260923-4');
+      if (new URLSearchParams(location.search).get('demo') === '1') target.searchParams.set('demo', '1');
+      location.assign(target.href);
+    });
+  }
   function render() {
     pill.querySelector('.count').textContent = saved.length;
-    pill.classList.toggle('show', saved.length > 0);
+    pill.classList.add('show');
     cards.forEach((card, id) => {
       const button = card.querySelector('.add-btn');
       const selected = saved.includes(id);

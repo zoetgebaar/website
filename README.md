@@ -28,7 +28,9 @@ Anyone with the URL can open the preview. It does not accept real orders, collec
 
 ```sh
 python3 -m http.server 8000 --bind 127.0.0.1
-node --test tests/workspace.test.cjs
+node --test tests/*.test.cjs
 ```
 
 Use HTTP rather than `file://`, as the site loads content with `fetch`. Tests cover content validation, demo login, local persistence, storage failure, order totals and unavailable content. Real authentication and order processing require a backend in a future version.
+
+Local HTML links and script/style URLs carry a release version to prevent mixed cached pages after deployment. Bump the version across HTML and the legacy wishlist fallback when releasing asset changes.
