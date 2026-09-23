@@ -5,8 +5,8 @@ Static website served by GitHub Pages from `main`.
 ## Pages
 
 - `index.html`, `webshop.html`, `over-ons.html`: public website.
-- `admin.html`: demonstration of the team editor.
-- `bestellen.html`: order preview, absent from public navigation, with `noindex, nofollow`.
+- `admin.html`: demonstration of the team editor, linked from the homepage.
+- `bestellen.html`: order preview, reached directly from “Mijn lijstje”, with `noindex, nofollow`. Saved favorites are preselected.
 
 ## Demo login
 

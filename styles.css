@@ -17,3 +17,6 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 
 .demo-preview-banner{background:#f7e8bd;color:#602438;text-align:center;padding:12px 20px;font-size:12px;line-height:1.6}.demo-preview-banner a{font-weight:700;text-underline-offset:3px}
+
+.cart-pill{text-decoration:none}
+@media(min-width:761px) and (max-width:950px){.home-nav .nav-cta{display:none}}
