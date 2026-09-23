@@ -1,24 +1,7 @@
 (() => {
   const $ = id => document.getElementById(id);
-  const repo = 'https://api.github.com/repos/zoetgebaar/website';
-  const endpoint = `${repo}/contents/data/content.json`;
-  let token = '', sha = '', content = null, dirty = false, busy = false;
-  async function api(url, options = {}) {
-    const response = await fetch(url, {
-      ...options,
-      headers: {'Accept': 'application/vnd.github+json', 'Authorization': `Bearer ${token}`, 'X-GitHub-Api-Version': '2026-03-10', ...(options.body ? {'Content-Type': 'application/json'} : {})},
-      cache: 'no-store',
-      signal: AbortSignal.timeout(20000)
-    });
-    if (!response.ok) {
-      const error = new Error(response.status === 401 ? 'Deze toegangscode is ongeldig of verlopen. Log opnieuw in.' : response.status === 403 ? 'Geen schrijftoegang of tijdelijk te veel verzoeken. Controleer de rechten van je toegangscode.' : response.status === 409 || response.status === 422 ? 'De inhoud is intussen gewijzigd of GitHub blokkeert deze publicatie. Je aanpassingen zijn nog niet opgeslagen.' : 'GitHub kon dit niet uitvoeren. Controleer je toegang en probeer opnieuw.');
-      error.status = response.status;
-      throw error;
-    }
-    return response.json();
-  }
-  const decode = base64 => new TextDecoder().decode(Uint8Array.from(atob(base64.replace(/\s/g, '')), char => char.charCodeAt(0)));
-  const encode = text => btoa(Array.from(new TextEncoder().encode(text), byte => String.fromCharCode(byte)).join(''));
+  const demoKey = 'zoet-gebaar-demo-content-v1';
+  let loggedIn = false, content = null, dirty = false, busy = false;
   function field(labelText, tag, id, value, attributes = {}) {
     const label = document.createElement('label'); label.htmlFor = id; label.textContent = labelText;
     const input = document.createElement(tag); input.id = id; input.value = value ?? '';
@@ -27,7 +10,7 @@
   }
   function setDirty(value) {
     dirty = value;
-    $('dirty-status').textContent = value ? 'Niet-gepubliceerde wijzigingen' : 'Alles is opgeslagen';
+    $('dirty-status').textContent = value ? 'Niet-opgeslagen wijzigingen' : 'Demo is opgeslagen';
     $('publish').disabled = !value || busy;
   }
   function showContent() {
@@ -44,33 +27,38 @@
       label.append(check, document.createTextNode('Beschikbaar in de collectie'));
       box.append(label); $('product-editors').append(box);
     });
-    setDirty(false); $('reload-content').hidden = true;
+    setDirty(false);
   }
   async function loadContent() {
-    const file = await api(`${endpoint}?ref=main`);
-    const parsed = window.ZoetContent.validate(JSON.parse(decode(file.content)));
-    sha = file.sha; content = parsed; showContent();
+    content = structuredClone(await window.ZoetContent.ready);
+    try {
+      const stored = localStorage.getItem(demoKey);
+      if (stored) content = window.ZoetContent.validate(JSON.parse(stored));
+    } catch { /* Ignore unavailable or invalid local drafts. Saving reports storage failures. */ }
+    showContent();
   }
   $('login-form').addEventListener('submit', async event => {
     event.preventDefault();
     const button = event.submitter; button.disabled = true;
-    token = $('access-code').value.trim(); $('access-code').value = '';
-    $('login-status').textContent = 'Toegang controleren…';
+    const valid = $('username').value.trim().toLowerCase() === 'demo' && $('access-code').value === 'zoetgebaar';
+    $('access-code').value = '';
+    if (!valid) {
+      $('login-status').textContent = 'Gebruik demo als gebruikersnaam en zoetgebaar als wachtwoord.';
+      button.disabled = false; $('access-code').focus(); return;
+    }
+    $('login-status').textContent = 'Demo laden…';
     try {
-      const user = await api('https://api.github.com/user');
-      const repository = await api(repo);
-      if (!repository.permissions?.push) throw new Error('Dit GitHub-account heeft geen schrijftoegang tot de website.');
-      await loadContent();
-      $('admin-name').textContent = user.name || user.login;
+      await loadContent(); loggedIn = true;
+      $('admin-name').textContent = 'meisjes';
       $('login-panel').hidden = true; $('editor-panel').hidden = false;
       $('announcement').focus(); $('login-status').textContent = '';
-    } catch (error) {
-      token = ''; $('login-status').textContent = error.message; $('access-code').focus();
+    } catch {
+      loggedIn = false; $('login-status').textContent = 'De demo kon niet worden geladen. Vernieuw de pagina en probeer opnieuw.';
     } finally { button.disabled = false; }
   });
   $('editor-form').addEventListener('input', () => setDirty(true));
   $('editor-form').addEventListener('submit', async event => {
-    event.preventDefault(); if (!dirty || busy || !token) return;
+    event.preventDefault(); if (!dirty || busy || !loggedIn) return;
     const next = structuredClone(content);
     next.announcement = $('announcement').value.trim(); next.intro = $('intro').value.trim(); next.shopNote = $('shop-note').value.trim();
     next.products.forEach((p, i) => {
@@ -79,35 +67,26 @@
       p.available = $(`available-${i}`).checked;
     });
     try { window.ZoetContent.validate(next); } catch (error) { $('save-status').textContent = error.message; return; }
-    busy = true; $('publish').disabled = true; $('logout').disabled = true;
-    // Freeze the form so edits made during the request cannot be lost on success.
-    const controls = [...$('editor-form').querySelectorAll('input, textarea, button')];
-    controls.forEach(control => { control.disabled = true; });
-    $('save-status').textContent = 'Bezig met publiceren…';
     try {
-      const result = await api(endpoint, {method: 'PUT', body: JSON.stringify({message: 'Update website content via team admin', content: encode(JSON.stringify(next, null, 2) + '\n'), sha, branch: 'main'})});
-      sha = result.content.sha; content = next; setDirty(false);
-      $('reload-content').hidden = true;
-      $('save-status').textContent = 'Opgeslagen in GitHub! Het kan enkele minuten duren voordat de wijzigingen op de website staan.';
-    } catch (error) {
-      $('save-status').textContent = error.message + ' Je invoer blijft hier staan.';
-      // A lost response may still mean the commit succeeded. Reload before retrying a conflict.
-      $('reload-content').hidden = false;
-    } finally {
-      busy = false; controls.forEach(control => { control.disabled = false; });
-      $('logout').disabled = false; setDirty(dirty); $('save-status').focus();
+      localStorage.setItem(demoKey, JSON.stringify(next));
+      content = next; setDirty(false);
+      $('save-status').textContent = 'Demo opgeslagen in deze browser. Bekijk het resultaat via de voorbeeldlinks hieronder. De live website is niet gewijzigd.';
+    } catch {
+      $('save-status').textContent = 'Opslaan lukt niet: browseropslag is geblokkeerd of vol. Je invoer blijft hier staan.';
     }
+    $('save-status').focus();
   });
-  $('reload-content').addEventListener('click', async () => {
-    if (dirty && !confirm('De nieuwste versie laden? Je niet-gepubliceerde wijzigingen worden vervangen.')) return;
-    $('reload-content').disabled = true;
-    try { await loadContent(); $('save-status').textContent = 'De nieuwste versie is geladen.'; }
-    catch (error) { $('save-status').textContent = error.message; }
-    finally { $('reload-content').disabled = false; }
+  $('reset-demo').addEventListener('click', async () => {
+    if (!confirm('Alle lokale demo-aanpassingen wissen en de originele inhoud terugzetten?')) return;
+    try {
+      localStorage.removeItem(demoKey);
+      content = structuredClone(await window.ZoetContent.ready); showContent();
+      $('save-status').textContent = 'De demo is teruggezet naar de originele inhoud.';
+    } catch { $('save-status').textContent = 'Terugzetten lukt niet. Probeer opnieuw.'; }
   });
   $('logout').addEventListener('click', () => {
-    if (dirty && !confirm('Uitloggen zonder je wijzigingen te publiceren?')) return;
-    token = ''; sha = ''; content = null; setDirty(false);
+    if (dirty && !confirm('Uitloggen zonder je wijzigingen op te slaan?')) return;
+    loggedIn = false; content = null; setDirty(false);
     $('editor-form').reset(); $('product-editors').replaceChildren(); $('save-status').textContent = '';
     $('editor-panel').hidden = true; $('login-panel').hidden = false; $('access-code').focus();
   });

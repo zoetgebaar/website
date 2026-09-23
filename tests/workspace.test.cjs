@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const fixture = JSON.parse(fs.readFileSync('data/content.json', 'utf8'));
 function environment(respond) {
-  const ids = new Map(); const requests = [];
+  const ids = new Map(); const requests = []; const storage = new Map();
   class Element {
     constructor(tag='div') { this.tag=tag; this.children=[]; this.events={}; this.value=''; this.textContent=''; this.hidden=false; this.disabled=false; this.attributes={}; }
     set id(value) { this._id=value; ids.set(value,this); }
@@ -19,12 +19,12 @@ function environment(respond) {
     querySelectorAll(){return [...ids.values()].filter(el=>['input','textarea','button'].includes(el.tag))}
     async fire(type,extra={}){await this.events[type]?.({preventDefault(){},submitter:new Element('button'),...extra})}
   }
-  const document = {getElementById(id){if(!ids.has(id)){const node=new Element();node.id=id}return ids.get(id)},createElement:tag=>new Element(tag),createTextNode:text=>({textContent:text}),querySelectorAll:()=>[],querySelector:()=>null};
-  const context = {document,console,Intl,TextDecoder,TextEncoder,Uint8Array,AbortSignal,structuredClone,URLSearchParams,atob,btoa,confirm:()=>true,localStorage:{getItem:()=> '[]'},fetch:async(url,options={})=>{requests.push({url,options}); return respond(url,options)},addEventListener(){}};
+  const document = {body:{children:[],prepend(node){this.children.unshift(node)}},getElementById(id){if(!ids.has(id)){const node=new Element();node.id=id}return ids.get(id)},createElement:tag=>new Element(tag),createTextNode:text=>({textContent:text}),querySelectorAll:()=>[],querySelector:()=>null};
+  const context = {document,console,Intl,TextDecoder,TextEncoder,Uint8Array,AbortSignal,structuredClone,URLSearchParams,URL,atob,btoa,confirm:()=>true,location:{search:'',href:'https://example.test/admin.html',origin:'https://example.test',pathname:'/admin.html'},localStorage:{getItem:key=>storage.get(key)??null,setItem:(key,value)=>storage.set(key,value),removeItem:key=>storage.delete(key)},fetch:async(url,options={})=>{requests.push({url,options}); return respond(url,options)},addEventListener(){}};
   context.window=context;
   vm.createContext(context);
   vm.runInContext(fs.readFileSync('content.js','utf8'),context);
-  return {context,requests,$:id=>document.getElementById(id),load:file=>vm.runInContext(fs.readFileSync(file,'utf8'),context)};
+  return {context,requests,storage,$:id=>document.getElementById(id),load:file=>vm.runInContext(fs.readFileSync(file,'utf8'),context)};
 }
 const response=(body,status=200)=>({ok:status>=200&&status<300,status,json:async()=>body});
 const file=()=>({sha:'old-sha',content:Buffer.from(JSON.stringify(fixture)).toString('base64')});
@@ -43,26 +43,26 @@ test('Content rejects invalid cents, changed product identities and empty conten
  }
  assert.equal(e.context.ZoetContent.price(fixture.products[0]),'Prijs volgt');
 });
-test('Admin rejects invalid tokens and accounts without push permission',async()=>{
- for(const mode of ['invalid','readonly']){
- const e=environment((url,options)=>url.endsWith('/user')&&mode==='invalid'?response({},401):url.endsWith('/website')?response({permissions:{push:false}}):api(url,options));
- e.load('admin.js');e.$('editor-panel').hidden=true;e.$('access-code').value='test-token';await e.$('login-form').fire('submit');
- assert.equal(e.$('editor-panel').hidden,true);assert.equal(e.$('access-code').value,'');assert.ok(e.$('login-status').textContent.length>0);assert.ok(!e.requests.some(r=>r.options.method==='PUT'));
- }
+test('Demo login rejects incorrect credentials and accepts the displayed demo account',async()=>{
+ const e=environment(api);e.load('admin.js');e.$('editor-panel').hidden=true;
+ e.$('username').value='demo';e.$('access-code').value='wrong';await e.$('login-form').fire('submit');
+ assert.equal(e.$('editor-panel').hidden,true);assert.equal(e.$('access-code').value,'');
+ e.$('access-code').value='zoetgebaar';await e.$('login-form').fire('submit');
+ assert.equal(e.$('editor-panel').hidden,false);assert.equal(e.requests.length,1);
 });
-test('Admin publishes validated UTF-8 data with the loaded SHA and token only in Authorization',async()=>{
- const e=environment(api);e.load('admin.js');e.$('access-code').value='test-token';await e.$('login-form').fire('submit');
- assert.equal(e.$('editor-panel').hidden,false);
+test('Demo edits save locally, survive a new login and never call GitHub',async()=>{
+ const e=environment(api);e.load('admin.js');e.$('username').value='demo';e.$('access-code').value='zoetgebaar';await e.$('login-form').fire('submit');
  e.$('announcement').value='Liefs van de meisjes ♡';e.$('price-0').value='4.95';await e.$('editor-form').fire('input');await e.$('editor-form').fire('submit');
- const req=e.requests.find(r=>r.options.method==='PUT');assert.ok(req);
- const body=JSON.parse(req.options.body);const data=JSON.parse(Buffer.from(body.content,'base64').toString('utf8'));
- assert.equal(body.sha,'old-sha');assert.equal(body.branch,'main');assert.equal(data.products[0].priceCents,495);assert.equal(data.announcement,'Liefs van de meisjes ♡');assert.equal(req.options.headers.Authorization,'Bearer test-token');assert.ok(!req.url.includes('test-token'));assert.ok(!req.options.body.includes('test-token'));
- assert.match(e.$('save-status').textContent,/Opgeslagen/);
+ const data=JSON.parse(e.storage.get('zoet-gebaar-demo-content-v1'));
+ assert.equal(data.products[0].priceCents,495);assert.equal(data.announcement,'Liefs van de meisjes ♡');assert.equal(e.requests.length,1);
+ await e.$('logout').fire('click');assert.equal(e.$('editor-panel').hidden,true);
+ e.$('access-code').value='zoetgebaar';await e.$('login-form').fire('submit');assert.equal(e.$('announcement').value,'Liefs van de meisjes ♡');
+ await e.$('reset-demo').fire('click');assert.equal(e.storage.has('zoet-gebaar-demo-content-v1'),false);assert.equal(e.$('announcement').value,fixture.announcement);
 });
-test('A conflicting publication keeps unsaved content and offers reloading',async()=>{
- const e=environment((url,options)=>options.method==='PUT'?response({},409):api(url,options));e.load('admin.js');e.$('access-code').value='test-token';await e.$('login-form').fire('submit');
- e.$('announcement').value='Mijn wijziging';await e.$('editor-form').fire('input');await e.$('editor-form').fire('submit');
- assert.equal(e.$('announcement').value,'Mijn wijziging');assert.equal(e.$('reload-content').hidden,false);assert.equal(e.$('publish').disabled,false);assert.match(e.$('save-status').textContent,/niet opgeslagen/);
+test('Blocked browser storage keeps edits and reports that saving failed',async()=>{
+ const e=environment(api);e.load('admin.js');e.$('username').value='demo';e.$('access-code').value='zoetgebaar';await e.$('login-form').fire('submit');
+ e.context.localStorage.setItem=()=>{throw new Error('blocked')};e.$('announcement').value='Mijn wijziging';await e.$('editor-form').fire('input');await e.$('editor-form').fire('submit');
+ assert.equal(e.$('announcement').value,'Mijn wijziging');assert.equal(e.$('publish').disabled,false);assert.match(e.$('save-status').textContent,/Opslaan lukt niet/);
 });
 test('Order preview handles unknown prices, exact cent totals and unavailable products without submission',async()=>{
  const priced=structuredClone(fixture);priced.products[0].priceCents=495;priced.products[2].available=false;
@@ -76,4 +76,12 @@ test('Order preview handles unknown prices, exact cent totals and unavailable pr
 });
 test('Unavailable content fails closed on the order page',async()=>{
  const e=environment(()=>response({},503));e.$('order-form').hidden=true;e.load('order.js');await settle();assert.equal(e.$('order-form').hidden,true);assert.match(e.$('order-load-status').textContent,/niet worden geladen/);
+});
+
+test('Local demo drafts only affect explicit demo URLs and have a working exit link',async()=>{
+ const normal=environment(api);const changed=structuredClone(fixture);changed.announcement='Demo only';normal.storage.set('zoet-gebaar-demo-content-v1',JSON.stringify(changed));
+ assert.equal((await normal.context.ZoetContent.ready).announcement,fixture.announcement);
+ const demo=environment(api);demo.context.location.search='?demo=1';demo.context.location.pathname='/index.html';demo.storage.set('zoet-gebaar-demo-content-v1',JSON.stringify(changed));
+ assert.equal((await demo.context.ZoetContent.ready).announcement,'Demo only');
+ assert.equal(demo.context.document.body.children[0].children[0].href,'/index.html');
 });

@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' https://api.github.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <title>Beheer — Zoet Gebaar</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="workspace.css">
 </head>
 <body class="workspace">
+  <div class="preview-banner"><strong>Demoversie</strong> · Probeer het beheer uit. Wijzigingen worden alleen in deze browser bewaard.</div>
   <header class="nav wrap">
     <a class="brand" href="index.html"><span class="brand-flower" aria-hidden="true">✳</span><span class="brand-name">zoet gebaar.</span></a>
     <a class="text-link" href="index.html">Bekijk de website ↗</a>
@@ -21,19 +22,21 @@
       <div><p class="eyebrow">ACHTER DE SCHERMEN</p><h1>Jullie doosjes.<br>Jullie verhaal.</h1><p>Een nieuwe prijs, een frisse omschrijving of een lief bericht bovenaan de website? Hier passen jullie het aan.</p><img src="assets/box-berry.svg" width="220" height="285" alt="Kartonnen snoepdoosje"></div>
       <div class="workspace-panel">
         <p class="eyebrow">ALLEEN VOOR HET TEAM</p><h2>Welkom terug ♡</h2>
-        <p>Log in met een persoonlijke GitHub-toegangscode om de website te bewerken.</p>
+        <p>Log in met de demogegevens hieronder en ontdek hoe het beheer werkt.</p>
         <form id="login-form">
-          <label for="access-code">GitHub-toegangscode</label>
-          <input id="access-code" type="password" autocomplete="off" required spellcheck="false" placeholder="Jouw persoonlijke toegangscode" aria-describedby="login-help">
-          <p class="field-hint" id="login-help">Je code wordt alleen naar GitHub gestuurd en niet in deze browser bewaard. Na vernieuwen log je opnieuw in.</p>
+          <label for="username">Gebruikersnaam</label>
+          <input id="username" autocomplete="username" required placeholder="demo">
+          <label for="access-code">Wachtwoord</label>
+          <input id="access-code" type="password" autocomplete="current-password" required placeholder="Demowachtwoord" aria-describedby="login-help">
+          <p class="field-hint" id="login-help">Gebruikersnaam: <strong>demo</strong> · Wachtwoord: <strong>zoetgebaar</strong></p>
           <button class="cta" type="submit">Inloggen <span aria-hidden="true">→</span></button>
         </form>
         <p id="login-status" role="status" class="form-status"></p>
-        <details><summary>Eerste keer inloggen?</summary><p>Gebruik een GitHub-account met schrijftoegang tot <strong>zoetgebaar/website</strong>. Maak bij GitHub een <em>fine-grained personal access token</em> voor alleen deze repository, met <strong>Contents: Read and write</strong>. Plak de code hierboven.</p><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Toegangscode aanmaken bij GitHub ↗</a></details>
+        <p class="field-hint">Dit is een demonstratie, geen beveiligde beheeromgeving. Gebruik hier geen echt wachtwoord.</p>
       </div>
     </section>
     <section id="editor-panel" hidden>
-      <div class="editor-heading"><div><p class="eyebrow">JULLIE ZOETE WERKPLEK</p><h1>Hallo, <span id="admin-name">team</span>.</h1><p>Pas iets aan, kijk het na en publiceer het op de website.</p></div><button id="logout" class="btn-ghost" type="button">Uitloggen</button></div>
+      <div class="editor-heading"><div><p class="eyebrow">JULLIE ZOETE WERKPLEK</p><h1>Hallo, <span id="admin-name">team</span>.</h1><p>Pas iets aan, sla je demo op en bekijk het resultaat.</p></div><button id="logout" class="btn-ghost" type="button">Uitloggen</button></div>
       <form id="editor-form">
         <div class="workspace-panel"><p class="eyebrow">01 / DE WEBSITE</p><h2>Een persoonlijk woordje</h2>
           <label for="announcement">Bericht bovenaan <span>max. 180 tekens</span></label><input id="announcement" maxlength="180" required>
@@ -42,9 +45,9 @@
         </div>
         <div class="section-head editor-section"><p class="eyebrow">02 / DE COLLECTIE</p><h2>De snoepdoosjes</h2><p>Een lege prijs verschijnt als ‘Prijs volgt’. Niet-beschikbare doosjes blijven zichtbaar, maar zijn niet te kiezen op de bestelpagina.</p></div>
         <div id="product-editors" class="editor-products"></div>
-        <div class="publish-bar"><div><strong id="dirty-status">Geen wijzigingen</strong><p>Publiceren slaat jullie wijzigingen op in GitHub. De website werkt daarna automatisch bij.</p></div><button id="publish" class="cta" type="submit" disabled>Publiceren <span aria-hidden="true">↗</span></button></div>
+        <div class="publish-bar"><div><strong id="dirty-status">Geen wijzigingen</strong><p>Opslaan bewaart deze demo alleen in je browser. De live website verandert niet.</p></div><button id="publish" class="cta" type="submit" disabled>Demo opslaan <span aria-hidden="true">↗</span></button></div>
         <p id="save-status" class="form-status" role="status" tabindex="-1"></p>
-        <button id="reload-content" class="btn-ghost" type="button" hidden>Nieuwste versie laden (eigen wijzigingen vervallen)</button>
+        <div class="hero-ctas"><a class="btn-ghost" href="index.html?demo=1" target="_blank" rel="noopener">Bekijk website met demo-inhoud ↗</a><a class="btn-ghost" href="bestellen.html?demo=1" target="_blank" rel="noopener">Bekijk bestelvoorbeeld ↗</a><button id="reset-demo" class="btn-ghost" type="button">Demo terugzetten</button></div>
       </form>
     </section>
   </main>

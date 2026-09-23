@@ -1,44 +1,34 @@
 # Zoet Gebaar
 
-Static website served by GitHub Pages from the `main` branch.
+Static website served by GitHub Pages from `main`.
 
 ## Pages
 
 - `index.html`, `webshop.html`, `over-ons.html`: public website.
-- `admin.html`: team editor with GitHub authentication.
-- `bestellen.html`: order preview, intentionally absent from public navigation and marked `noindex, nofollow`.
+- `admin.html`: demonstration of the team editor.
+- `bestellen.html`: order preview, absent from public navigation, with `noindex, nofollow`.
 
-The order preview is accessible to anyone who knows its URL. It does not accept orders, collect payment, or transmit or persist customer information. Search directives are not access control.
+## Demo login
 
-## Team login and publishing
+Username: **demo** · Password: **zoetgebaar**
 
-The first version uses personal GitHub access tokens because GitHub Pages cannot run a login server. There is no shared password or simulated client-side password check.
+This is an intentionally public UI demonstration, not secure authentication. There are no real accounts, private admin data, tokens, or server-side writes. Do not use real passwords.
 
-1. Each editor needs a GitHub account with write access to `zoetgebaar/website`.
-2. Create an expiring **fine-grained personal access token**, scoped to this repository only, with **Contents: Read and write**. Organization approval may be necessary.
-3. Open `admin.html` and enter the token. It is sent only to `api.github.com`, kept in page memory, and cleared on logout. Refreshing requires logging in again.
-4. Edit announcement, homepage introduction, collection note, product names, descriptions, euro prices, and availability.
-5. **Publiceren** commits `data/content.json` to `main`. GitHub Pages then redeploys; allow a few minutes.
+Editors can try changes to the announcement, homepage introduction, collection note, product names, descriptions, prices and availability. **Demo opslaan** stores content only in this browser under `zoet-gebaar-demo-content-v1`. The public website and GitHub content are not changed. Logout returns to the demo login; refreshing requires logging in again.
 
-Login checks the authenticated account and repository push permission. GitHub enforces token permission and branch protection on publication. The editor includes the file SHA in each update to reject concurrent changes. Conflicts and request failures keep entered edits intact. The reload action explicitly asks before discarding edits.
+The editor's preview links append `?demo=1` to show locally saved content. Normal URLs always show published content. A banner identifies demo previews. **Demo terugzetten** removes the local draft after confirmation.
 
-Never commit tokens or place them in browser storage, URLs, site content, or screenshots. Email/password or OAuth sign-in would need an additional configured authentication service.
+## Order preview
 
-GitHub reference: [Create or update repository file contents](https://docs.github.com/en/rest/repos/contents#create-or-update-file-contents).
+Anyone with the URL can open the preview. It does not accept real orders, collect payment or transmit customer information. Search directives are not access control. Amounts are integer cents; unknown prices never become free orders. Delivery fees and checkout are not configured.
 
-## Content
+## Content and development
 
-`data/content.json` is the shared source for the public website, editor and order preview. Amounts are integer cents; `null` means the price is not known. IDs and order of the four products stay stable for compatibility with existing wishlists. Text is inserted as plain text, never HTML.
-
-Existing public HTML is a readable fallback if the content request fails. The order preview remains unavailable on a content-loading error. Unknown prices never become a zero-price total. Delivery charges and checkout remain unconfigured.
-
-## Development
+`data/content.json` is the shared published source. `null` prices mean “Prijs volgt”. Product IDs and order remain fixed for wishlist compatibility. Content is inserted as text, never HTML.
 
 ```sh
 python3 -m http.server 8000 --bind 127.0.0.1
 node --test tests/workspace.test.cjs
 ```
 
-Then open `http://127.0.0.1:8000/`. Use HTTP rather than `file://` because content is loaded with `fetch`.
-
-Tests exercise content validation, denied logins, UTF-8 publication, conflict handling, subtotal calculation, unavailable products, and failure behavior using mocked GitHub responses. A real publication from the admin requires an editor's token and is not exercised by the automated tests.
+Use HTTP rather than `file://`, as the site loads content with `fetch`. Tests cover content validation, demo login, local persistence, storage failure, order totals and unavailable content. Real authentication and order processing require a backend in a future version.
