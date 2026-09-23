@@ -14,29 +14,7 @@
   const price = product => product.priceCents === null ? 'Prijs volgt' : money(product.priceCents);
   const ready = fetch('data/content.json', {cache: 'no-cache'})
     .then(response => { if (!response.ok) throw new Error('De collectie kon niet worden geladen. Probeer opnieuw.'); return response.json(); })
-    .then(validate)
-    .then(data => {
-      if (new URLSearchParams(window.location.search).get('demo') !== '1') return data;
-      let preview = data;
-      try {
-        const stored = localStorage.getItem('zoet-gebaar-demo-content-v1');
-        if (stored) preview = validate(JSON.parse(stored));
-      } catch { /* Invalid drafts fall back to the published content. */ }
-      const banner = document.createElement('div');
-      banner.className = 'demo-preview-banner';
-      banner.textContent = 'Demovoorbeeld · Je ziet lokale aanpassingen. De live website is niet gewijzigd. ';
-      const exit = document.createElement('a');
-      exit.href = window.location.pathname; exit.textContent = 'Demo verlaten';
-      banner.append(exit); document.body.prepend(banner);
-      document.querySelectorAll('a[href]').forEach(link => {
-        if (link === exit) return;
-        const url = new URL(link.href, window.location.href);
-        if (url.origin === window.location.origin && /\/(index|webshop|over-ons|bestellen)\.html$/.test(url.pathname)) {
-          url.searchParams.set('demo', '1'); link.href = url.href;
-        }
-      });
-      return preview;
-    });
+    .then(validate);
   window.ZoetContent = {validate, money, price, ready};
   // Leave the static content readable if the content request fails.
   ready.then(data => {

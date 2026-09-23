@@ -5,18 +5,7 @@ Static website served by GitHub Pages from `main`.
 ## Pages
 
 - `index.html`, `webshop.html`, `over-ons.html`: public website.
-- `admin.html`: demonstration of the team editor, linked from the homepage.
 - `bestellen.html`: order preview, reached directly from “Mijn lijstje”, with `noindex, nofollow`. Saved favorites are preselected.
-
-## Demo login
-
-Username: **demo** · Password: **zoetgebaar**
-
-This is an intentionally public UI demonstration, not secure authentication. There are no real accounts, private admin data, tokens, or server-side writes. Do not use real passwords.
-
-Editors can try changes to the announcement, homepage introduction, collection note, product names, descriptions, prices and availability. **Demo opslaan** stores content only in this browser under `zoet-gebaar-demo-content-v1`. The public website and GitHub content are not changed. Logout returns to the demo login; refreshing requires logging in again.
-
-The editor's preview links append `?demo=1` to show locally saved content. Normal URLs always show published content. A banner identifies demo previews. **Demo terugzetten** removes the local draft after confirmation.
 
 ## Order preview
 
@@ -31,6 +20,6 @@ python3 -m http.server 8000 --bind 127.0.0.1
 node --test tests/*.test.cjs
 ```
 
-Use HTTP rather than `file://`, as the site loads content with `fetch`. Tests cover content validation, demo login, local persistence, storage failure, order totals and unavailable content. Real authentication and order processing require a backend in a future version.
+Use HTTP rather than `file://`, as the site loads content with `fetch`. Tests cover content validation, wishlist navigation, order totals and unavailable content. Real order processing requires a backend in a future version.
 
 Local HTML links and script/style URLs carry a release version to prevent mixed cached pages after deployment. Bump the version across HTML and the legacy wishlist fallback when releasing asset changes.

@@ -4,9 +4,6 @@
 .workspace-panel { background: var(--paper); border: 1px solid var(--line); border-radius: 18px; padding: 30px; }
 .workspace-panel > p { font-size: 13px; margin-top: 14px; }
 .workspace-panel .eyebrow { margin-top: 0; }
-.login-layout { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 85px; padding-block: 35px; }
-.login-layout > div > p:not(.eyebrow) { margin-top: 22px; max-width: 430px; }
-.login-layout img { margin-top: 20px; transform: rotate(-8deg); }
 .workspace form label { display: block; font-size: 12px; font-weight: 700; margin: 23px 0 9px; }
 .workspace label span { color: var(--ink-soft); font-size: 10px; font-weight: 400; }
 .workspace input:not([type=checkbox]), .workspace textarea, .workspace select { display: block; width: 100%; border: 1px solid #bfa5ad; background: #fffef9; color: var(--ink); border-radius: 9px; padding: 13px; font: inherit; font-size: 14px; }
@@ -15,23 +12,6 @@
 .workspace .field-hint { font-size: 11px; margin-top: 9px; line-height: 1.6; }
 .workspace form .cta { margin-top: 24px; }
 .workspace button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-.form-status { min-height: 24px; font-size: 13px; margin-block: 15px; overflow-wrap: anywhere; }
-.workspace details { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 19px; font-size: 12px; }
-.workspace summary { cursor: pointer; font-weight: 700; }
-.workspace details p { margin-block: 13px; font-size: 12px; }
-.editor-heading { display: flex; align-items: center; justify-content: space-between; gap: 25px; margin-bottom: 36px; }
-.editor-heading p:not(.eyebrow) { margin-top: 18px; font-size: 14px; }
-#editor-panel { padding-block: 20px; }
-.editor-section { margin-top: 40px; }
-.editor-section p { font-size: 13px; max-width: 650px; }
-.editor-products { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.product-editor { min-width: 0; margin: 0; }
-.product-editor legend { padding-inline: 12px; font-weight: 700; font-size: 14px; }
-.workspace .check-label { display: flex; align-items: center; gap: 11px; }
-.check-label input { width: 18px; height: 18px; accent-color: var(--berry); }
-.publish-bar { display: flex; justify-content: space-between; gap: 25px; align-items: center; border-top: 1px solid var(--line); margin-top: 36px; padding-top: 25px; }
-.publish-bar p { font-size: 12px; max-width: 570px; margin-top: 5px; }
-.workspace .publish-bar .cta { margin: 0; flex-shrink: 0; }
 .preview-banner { background: #f7e8bd; padding: 12px 22px; text-align: center; font-size: 12px; line-height: 1.6; }
 .order-intro { max-width: 720px; padding-block: 25px 35px; }
 .order-intro p:not(.eyebrow) { margin-top: 20px; }
@@ -55,10 +35,8 @@
 .order-confirmation h3 { font-size: 24px; }
 .order-confirmation p { font-size: 13px; margin-top: 12px; }
 @media (max-width: 760px) {
-  .login-layout, .editor-products, .order-layout { grid-template-columns: 1fr; gap: 25px; }
-  .login-layout img { display: none; }
+  .order-layout { grid-template-columns: 1fr; gap: 25px; }
   .workspace-panel { padding: 23px; }
-  .editor-heading, .publish-bar { align-items: start; flex-direction: column; }
   .order-summary { position: static; }
   .workspace .nav .text-link { font-size: 10px; }
 }
