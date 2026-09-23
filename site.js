@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (pill.tagName === 'BUTTON') {
     pill.addEventListener('click', () => {
       const target = new URL('bestellen.html', location.href);
-      target.searchParams.set('v', '20260923-4');
+      target.searchParams.set('v', '20260923-5');
       if (new URLSearchParams(location.search).get('demo') === '1') target.searchParams.set('demo', '1');
       location.assign(target.href);
     });

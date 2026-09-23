@@ -85,3 +85,11 @@ test('Local demo drafts only affect explicit demo URLs and have a working exit l
  assert.equal((await demo.context.ZoetContent.ready).announcement,'Demo only');
  assert.equal(demo.context.document.body.children[0].children[0].href,'/index.html');
 });
+
+test('Demo admin can log in when the content request fails',async()=>{
+ const e=environment(()=>{throw new Error('Failed to fetch')});e.load('admin.js');
+ e.$('username').value='demo';e.$('access-code').value='zoetgebaar';await e.$('login-form').fire('submit');
+ assert.equal(e.$('editor-panel').hidden,false);assert.equal(e.$('announcement').value,fixture.announcement);
+ e.$('announcement').value='Offline demo';await e.$('editor-form').fire('input');await e.$('editor-form').fire('submit');
+ assert.equal(JSON.parse(e.storage.get('zoet-gebaar-demo-content-v1')).announcement,'Offline demo');
+});

@@ -1,5 +1,8 @@
 (() => {
   const $ = id => document.getElementById(id);
+  // Bundled demo content also lets the editor open without a network connection.
+  const demoDefaults = {"version": 1, "announcement": "Klein doosje. Groot gebaar. ✳ Met de hand gevuld, met liefde gegeven.", "intro": "Voor je liefste mens. Voor een zomaar-moment. Of stiekem voor jezelf. Een kartonnen doosje vol snoep. Wij vullen het, jij maakt iemands dag.", "shopNote": "Onze doosjes worden nog klaargemaakt voor de verkoop. Prijzen volgen binnenkort. Bewaar alvast je favorieten in je lijstje; bestellen en betalen is nog niet mogelijk.", "products": [{"id": "klein-gewoon", "name": "Klein doosje", "description": "Handgevuld, klein formaat — een bedankje of een klein extraatje.", "mix": "gewoon", "size": "klein", "priceCents": null, "available": true}, {"id": "klein-zonder-gelatine", "name": "Klein doosje", "description": "Zelfde klein formaat, gevuld met onze snoepmix zonder gelatine.", "mix": "gelatinevrij", "size": "klein", "priceCents": null, "available": true}, {"id": "groot-gewoon", "name": "Groot doosje", "description": "Groter formaat, voor wie liever wat meer geeft — of langer van geniet.", "mix": "gewoon", "size": "groot", "priceCents": null, "available": true}, {"id": "groot-zonder-gelatine", "name": "Groot doosje", "description": "Groot formaat, zonder gelatine — zodat ook deze klanten volop kunnen kiezen.", "mix": "gelatinevrij", "size": "groot", "priceCents": null, "available": true}]};
+  const baseContent = () => window.ZoetContent.ready.catch(() => structuredClone(demoDefaults));
   const demoKey = 'zoet-gebaar-demo-content-v1';
   let loggedIn = false, content = null, dirty = false, busy = false;
   function field(labelText, tag, id, value, attributes = {}) {
@@ -30,7 +33,7 @@
     setDirty(false);
   }
   async function loadContent() {
-    content = structuredClone(await window.ZoetContent.ready);
+    content = structuredClone(await baseContent());
     try {
       const stored = localStorage.getItem(demoKey);
       if (stored) content = window.ZoetContent.validate(JSON.parse(stored));
@@ -80,7 +83,7 @@
     if (!confirm('Alle lokale demo-aanpassingen wissen en de originele inhoud terugzetten?')) return;
     try {
       localStorage.removeItem(demoKey);
-      content = structuredClone(await window.ZoetContent.ready); showContent();
+      content = structuredClone(await baseContent()); showContent();
       $('save-status').textContent = 'De demo is teruggezet naar de originele inhoud.';
     } catch { $('save-status').textContent = 'Terugzetten lukt niet. Probeer opnieuw.'; }
   });
