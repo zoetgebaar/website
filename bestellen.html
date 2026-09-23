@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <title>Jouw zoete bestelling — Voorbeeld</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="workspace.css">
+</head>
+<body class="workspace">
+  <div class="preview-banner"><strong>Voorbeeldpagina</strong> · Je kunt je doosjes samenstellen. Er wordt niets besteld, verstuurd of betaald.</div>
+  <header class="nav wrap"><a class="brand" href="index.html"><span class="brand-flower" aria-hidden="true">✳</span><span class="brand-name">zoet gebaar.</span></a><a class="text-link" href="webshop.html">Terug naar de collectie ↗</a></header>
+  <main class="wrap workspace-main">
+    <section class="order-intro"><p class="eyebrow">EEN DOOSJE VOOR JOU. OF VOOR EEN ANDER.</p><h1>Maak er iets<br><em>persoonlijks van.</em></h1><p>Kies je doosjes, schrijf iets liefs en bekijk je overzicht.</p></section>
+    <p id="order-load-status" role="status">De doosjes worden geladen…</p>
+    <noscript><p>Schakel JavaScript in om deze voorbeeldbestelling samen te stellen.</p></noscript>
+    <form id="order-form" class="order-layout" hidden>
+      <div>
+        <section class="workspace-panel order-step"><p class="eyebrow">01 / JOUW DOOSJES</p><h2>Hoeveel liefde mag het zijn?</h2><div id="order-products"></div></section>
+        <section class="workspace-panel order-step"><p class="eyebrow">02 / HET KAARTJE</p><h2>Een klein woordje erbij</h2><label for="gift-message">Jouw boodschap <span>optioneel · max. 200 tekens</span></label><textarea id="gift-message" maxlength="200" rows="4" placeholder="Voor jou, omdat jij jij bent. ♡"></textarea><p class="field-hint">Deze boodschap geldt voor alle doosjes in dit voorbeeld.</p></section>
+        <section class="workspace-panel order-step"><p class="eyebrow">03 / ONTVANGEN</p><h2>Hoe wil je het ontvangen?</h2><label for="delivery">Jouw voorkeur</label><select id="delivery"><option value="pickup">Afhalen op een markt of event</option><option value="shipping">Laten bezorgen</option></select><p id="delivery-note" class="field-hint">Afhaallocaties en momenten worden later bekendgemaakt.</p></section>
+      </div>
+      <aside class="workspace-panel order-summary" aria-label="Besteloverzicht"><p class="eyebrow">JOUW ZOETE GEBAAR</p><h2>Het overzicht</h2><div id="summary-items"></div><div id="summary-total" class="summary-row summary-total" aria-live="polite"></div><p id="price-note" class="field-hint"></p><p id="summary-message" class="summary-message" hidden></p><p id="summary-delivery" class="field-hint"></p><button id="review-order" class="cta" type="submit" disabled>Voorbeeld controleren <span aria-hidden="true">→</span></button><p class="field-hint">Dit is een voorproefje. Je gegevens worden niet verzonden of opgeslagen.</p><div id="order-confirmation" class="order-confirmation" role="status" tabindex="-1" hidden><h3>Dat wordt een zoet gebaar ♡</h3><p>Je voorbeeld is compleet. Er is geen bestelling geplaatst. Zodra we starten, kun je hier echt bestellen.</p></div></aside>
+    </form>
+  </main>
+  <script src="content.js"></script><script src="order.js"></script>
+</body>
+</html>

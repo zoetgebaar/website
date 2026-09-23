@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "announcement": "Klein doosje. Groot gebaar. ✳ Met de hand gevuld, met liefde gegeven.",
+  "intro": "Voor je liefste mens. Voor een zomaar-moment. Of stiekem voor jezelf. Een kartonnen doosje vol snoep. Wij vullen het, jij maakt iemands dag.",
+  "shopNote": "Onze doosjes worden nog klaargemaakt voor de verkoop. Prijzen volgen binnenkort. Bewaar alvast je favorieten in je lijstje; bestellen en betalen is nog niet mogelijk.",
+  "products": [
+    {
+      "id": "klein-gewoon",
+      "name": "Klein doosje",
+      "description": "Handgevuld, klein formaat — een bedankje of een klein extraatje.",
+      "mix": "gewoon",
+      "size": "klein",
+      "priceCents": null,
+      "available": true
+    },
+    {
+      "id": "klein-zonder-gelatine",
+      "name": "Klein doosje",
+      "description": "Zelfde klein formaat, gevuld met onze snoepmix zonder gelatine.",
+      "mix": "gelatinevrij",
+      "size": "klein",
+      "priceCents": null,
+      "available": true
+    },
+    {
+      "id": "groot-gewoon",
+      "name": "Groot doosje",
+      "description": "Groter formaat, voor wie liever wat meer geeft — of langer van geniet.",
+      "mix": "gewoon",
+      "size": "groot",
+      "priceCents": null,
+      "available": true
+    },
+    {
+      "id": "groot-zonder-gelatine",
+      "name": "Groot doosje",
+      "description": "Groot formaat, zonder gelatine — zodat ook deze klanten volop kunnen kiezen.",
+      "mix": "gelatinevrij",
+      "size": "groot",
+      "priceCents": null,
+      "available": true
+    }
+  ]
+}

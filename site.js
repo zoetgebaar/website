@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const title = document.createElement('strong');
       title.textContent = card.querySelector('h3').textContent;
       const mix = document.createElement('p');
-      mix.textContent = `${card.dataset.mix === 'gewoon' ? 'Gewone mix' : 'Zonder gelatine'} · prijs volgt`;
+      mix.textContent = `${card.dataset.mix === 'gewoon' ? 'Gewone mix' : 'Zonder gelatine'} · ${card.querySelector('.price').textContent}`;
       info.append(title, mix);
       const remove = document.createElement('button');
       remove.className = 'remove-item';
@@ -115,4 +115,5 @@ document.addEventListener('DOMContentLoaded', () => {
     dialog.querySelector('.close-dialog').focus();
   });
   render();
+  window.ZoetContent?.ready.then(render).catch(() => {});
 });
