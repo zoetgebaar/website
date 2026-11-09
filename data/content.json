@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "announcement": "Waar zoet een gebaar wordt. ✳ Met de hand gevuld, met liefde gegeven.",
+  "announcement": "Waar zoet een gebaar wordt. ✦ Met de hand gevuld, met liefde gegeven.",
   "intro": "Voor je liefste mens. Voor een zomaar-moment. Of stiekem voor jezelf. Een doosje vol snoep. Wij vullen het, jij maakt iemands dag.",
   "shopNote": "Bewaar je favorieten in je lijstje en stel je bestelling alvast samen. Online bestellen en betalen wordt nog ingericht; tot dan vind je ons op markten en events.",
   "products": [
@@ -11,7 +11,7 @@
       "mix": "gewoon",
       "size": "klein",
       "weightGrams": 250,
-      "priceCents": 550,
+      "priceCents": 600,
       "available": true
     },
     {
@@ -21,7 +21,7 @@
       "mix": "gelatinevrij",
       "size": "klein",
       "weightGrams": 250,
-      "priceCents": 550,
+      "priceCents": 600,
       "available": true
     },
     {
@@ -51,7 +51,7 @@
       "mix": "gewoon",
       "size": "groot",
       "weightGrams": 800,
-      "priceCents": 1250,
+      "priceCents": 1300,
       "available": true
     },
     {
@@ -61,7 +61,7 @@
       "mix": "gelatinevrij",
       "size": "groot",
       "weightGrams": 800,
-      "priceCents": 1250,
+      "priceCents": 1300,
       "available": true
     }
   ]

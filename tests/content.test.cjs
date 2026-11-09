@@ -6,7 +6,7 @@ const vm = require('node:vm');
 const fixture = JSON.parse(fs.readFileSync('data/content.json', 'utf8'));
 const pages = ['index.html', 'webshop.html', 'over-ons.html'].map(file => [file, fs.readFileSync(file, 'utf8')]);
 const order = fs.readFileSync('bestellen.html', 'utf8');
-const VERSION = '20261109-1';
+const VERSION = '20261109-2';
 
 function environment(respond) {
   const context = {document: {querySelectorAll: () => [], querySelector: () => null}, console, Intl, fetch: async () => respond(), addEventListener() {}};
@@ -21,9 +21,9 @@ test('Content loads and formats the six prices', async () => {
   const e = environment(() => response(structuredClone(fixture)));
   const data = await e.ZoetContent.ready;
   assert.equal(data.products.length, 6);
-  assert.deepEqual(data.products.map(p => p.priceCents), [550, 550, 1000, 1000, 1250, 1250]);
+  assert.deepEqual(data.products.map(p => p.priceCents), [600, 600, 1000, 1000, 1300, 1300]);
   assert.deepEqual(data.products.map(p => p.weightGrams), [250, 250, 500, 500, 800, 800]);
-  assert.match(e.ZoetContent.price(data.products[0]), /5,50/);
+  assert.match(e.ZoetContent.price(data.products[0]), /6,00/);
 });
 
 test('Content rejects invalid cents, weights, changed identities and empty text', async () => {

@@ -40,6 +40,11 @@
 .order-confirmation p { font-size: 13px; margin-top: 12px; }
 @media (max-width: 760px) {
   .order-layout { grid-template-columns: 1fr; gap: 25px; }
+  .order-product { grid-template-columns: 58px 1fr; row-gap: 10px; }
+  .order-product > div:last-child { grid-column: 2; display: flex; align-items: center; gap: 12px; }
+  .workspace .order-product label { margin: 0; }
+  .workspace .order-product input { width: 84px; }
+  .order-actions .btn-ghost { width: 100%; }
   .workspace-panel { padding: 23px; }
   .order-summary { position: static; }
   .workspace .nav .text-link { font-size: 10px; }

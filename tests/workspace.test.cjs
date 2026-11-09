@@ -43,15 +43,15 @@ test('Only wishlist items are listed, with exact cent totals, unknown prices and
  assert.equal(rows(e).length,4);
  assert.equal(e.$('quantity-middel-gewoon').value,'1');
  assert.equal(e.$('summary-total').children[1].textContent,'Prijs volgt');
- e.$('quantity-klein-zonder-gelatine').value='0';await e.$('order-form').fire('input');assert.match(e.$('summary-total').children[1].textContent,/15,50/);
- e.$('quantity-klein-gewoon').value='3';await e.$('order-form').fire('input');assert.match(e.$('summary-total').children[1].textContent,/26,50/);
+ e.$('quantity-klein-zonder-gelatine').value='0';await e.$('order-form').fire('input');assert.match(e.$('summary-total').children[1].textContent,/16,00/);
+ e.$('quantity-klein-gewoon').value='3';await e.$('order-form').fire('input');assert.match(e.$('summary-total').children[1].textContent,/28,00/);
  e.$('quantity-klein-zonder-gelatine').value='1';await e.$('order-form').fire('input');assert.equal(e.$('summary-total').children[1].textContent,'Prijs volgt');
  assert.equal(e.$('quantity-groot-gewoon').disabled,true);assert.equal(e.$('quantity-groot-gewoon').value,'0');
 });
 
 test('Card message and delivery preference appear in the summary; the preview never submits',async()=>{
  const e=environment(()=>response(structuredClone(fixture)));e.storage.set('zoet-gebaar-wishlist-v1','[2,5]');e.load('order.js');await settle();
- assert.match(e.$('summary-total').children[1].textContent,/22,50/);
+ assert.match(e.$('summary-total').children[1].textContent,/23,00/);
  assert.equal(e.$('summary-delivery').textContent,'Voorkeur: afhalen');
  e.$('delivery').value='shipping';await e.$('order-form').fire('change');assert.match(e.$('summary-delivery').textContent,/bezorgen/);assert.match(e.$('delivery-note').textContent,/Bezorgkosten/);
  e.$('gift-message').value='<script>alert(1)</script>';await e.$('order-form').fire('input');assert.equal(e.$('summary-message').textContent,'<script>alert(1)</script>');assert.equal(e.$('summary-message').hidden,false);
