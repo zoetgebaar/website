@@ -6,7 +6,7 @@
   "products": [
     {
       "id": "klein-gewoon",
-      "name": "Klein doosje",
+      "name": "Klein doosje · gelatine",
       "description": "Onze gewone snoepmix in een klein doosje. Een bedankje, een extraatje of een klein lichtpuntje.",
       "mix": "gewoon",
       "size": "klein",
@@ -16,7 +16,7 @@
     },
     {
       "id": "klein-zonder-gelatine",
-      "name": "Klein doosje",
+      "name": "Klein doosje · gelatinevrij",
       "description": "Dezelfde kleine verrassing, gevuld met onze snoepmix zonder gelatine.",
       "mix": "gelatinevrij",
       "size": "klein",
@@ -26,7 +26,7 @@
     },
     {
       "id": "middel-gewoon",
-      "name": "Middelgroot doosje",
+      "name": "Middelgroot doosje · gelatine",
       "description": "Onze gewone snoepmix, met net dat beetje meer. Om te delen, of lekker voor jezelf te houden.",
       "mix": "gewoon",
       "size": "middel",
@@ -36,7 +36,7 @@
     },
     {
       "id": "middel-zonder-gelatine",
-      "name": "Middelgroot doosje",
+      "name": "Middelgroot doosje · gelatinevrij",
       "description": "Het middelgrote formaat, gevuld met onze snoepmix zonder gelatine.",
       "mix": "gelatinevrij",
       "size": "middel",
@@ -46,7 +46,7 @@
     },
     {
       "id": "groot-gewoon",
-      "name": "Groot doosje",
+      "name": "Groot doosje · gelatine",
       "description": "Onze gewone snoepmix in het grootste doosje. Voor wie graag groots geeft, of lang geniet.",
       "mix": "gewoon",
       "size": "groot",
@@ -56,7 +56,7 @@
     },
     {
       "id": "groot-zonder-gelatine",
-      "name": "Groot doosje",
+      "name": "Groot doosje · gelatinevrij",
       "description": "Ons grootste doosje, helemaal gevuld met de snoepmix zonder gelatine.",
       "mix": "gelatinevrij",
       "size": "groot",

@@ -21,7 +21,7 @@
     const lines = $('summary-items'); lines.replaceChildren();
     selected.forEach(({product: p, quantity}) => {
       const row = document.createElement('div'); row.className = 'summary-row';
-      const name = document.createElement('span'); name.textContent = `${quantity} × ${p.name} ${p.weightGrams} g · ${ZoetContent.mixLabel(p)}`;
+      const name = document.createElement('span'); name.textContent = `${quantity} × ${p.name} · ${p.weightGrams} g`;
       const price = document.createElement('span'); price.textContent = p.priceCents === null ? 'Prijs volgt' : ZoetContent.money(p.priceCents * quantity);
       row.append(name, price); lines.append(row);
     });
@@ -49,7 +49,7 @@
       const row = document.createElement('div'); row.className = 'order-product';
       const image = document.createElement('img'); image.src = photo[p.size]; image.alt = '';
       const info = document.createElement('div'); const name = document.createElement('h3'); name.textContent = `${p.name} · ${p.weightGrams} g`;
-      const details = document.createElement('p'); details.textContent = `${ZoetContent.mixLabel(p)} · ${p.available ? ZoetContent.price(p) : 'Tijdelijk niet beschikbaar'}`;
+      const details = document.createElement('p'); details.textContent = p.available ? `${ZoetContent.price(p)} per doosje` : 'Tijdelijk niet beschikbaar';
       const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'remove-item'; remove.textContent = 'Verwijderen';
       remove.setAttribute('aria-label', `${p.name} ${p.weightGrams} gram, ${ZoetContent.mixLabel(p).toLowerCase()} verwijderen uit je lijstje`);
       remove.addEventListener('click', () => { saved = saved.filter(i => all[i] !== p); persist(); render(); });

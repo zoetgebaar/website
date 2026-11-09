@@ -28,6 +28,6 @@ Use HTTP rather than `file://`, as the site loads content with `fetch`. Tests co
 
 - `assets/logo.jpg` and `favicon.png`: the ZG logo.
 - `assets/doosje-roze.jpg`, `assets/doosje-kerst.jpg`, `assets/doosje-zwart.jpg`: product photos, currently reused per size until each article has its own photo.
-- `assets/team.jpg`: the photo of the three founders on the home page. `assets/team-<name>.jpg`: portraits on the founder cards of `over-ons.html`; cards without a portrait show initials.
+- `assets/team.jpg`: the photo of the three founders on the home page. `assets/team-aelis.jpg`, `assets/team-aylien.jpg`, `assets/team-shaunie.jpg`: portraits on the founder cards of `over-ons.html`.
 
 Local HTML links and script/style URLs carry a release version (`?v=…`) to prevent mixed cached pages after deployment. Bump it across all HTML files and `tests/content.test.cjs` when releasing asset changes.
