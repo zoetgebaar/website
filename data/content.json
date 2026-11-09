@@ -1,43 +1,67 @@
 {
-  "version": 1,
-  "announcement": "Klein doosje. Groot gebaar. ✳ Met de hand gevuld, met liefde gegeven.",
-  "intro": "Voor je liefste mens. Voor een zomaar-moment. Of stiekem voor jezelf. Een kartonnen doosje vol snoep. Wij vullen het, jij maakt iemands dag.",
-  "shopNote": "Onze doosjes worden nog klaargemaakt voor de verkoop. Prijzen volgen binnenkort. Bewaar alvast je favorieten in je lijstje; bestellen en betalen is nog niet mogelijk.",
+  "version": 2,
+  "announcement": "Waar zoet een gebaar wordt. ✳ Met de hand gevuld, met liefde gegeven.",
+  "intro": "Voor je liefste mens. Voor een zomaar-moment. Of stiekem voor jezelf. Een doosje vol snoep. Wij vullen het, jij maakt iemands dag.",
+  "shopNote": "Bewaar je favorieten in je lijstje en stel je bestelling alvast samen. Online bestellen en betalen wordt nog ingericht; tot dan vind je ons op markten en events.",
   "products": [
     {
       "id": "klein-gewoon",
       "name": "Klein doosje",
-      "description": "Handgevuld, klein formaat — een bedankje of een klein extraatje.",
+      "description": "Onze gewone snoepmix in een klein doosje. Een bedankje, een extraatje of een klein lichtpuntje.",
       "mix": "gewoon",
       "size": "klein",
-      "priceCents": null,
+      "weightGrams": 250,
+      "priceCents": 550,
       "available": true
     },
     {
       "id": "klein-zonder-gelatine",
       "name": "Klein doosje",
-      "description": "Zelfde klein formaat, gevuld met onze snoepmix zonder gelatine.",
+      "description": "Dezelfde kleine verrassing, gevuld met onze snoepmix zonder gelatine.",
       "mix": "gelatinevrij",
       "size": "klein",
-      "priceCents": null,
+      "weightGrams": 250,
+      "priceCents": 550,
+      "available": true
+    },
+    {
+      "id": "middel-gewoon",
+      "name": "Middelgroot doosje",
+      "description": "Onze gewone snoepmix, met net dat beetje meer. Om te delen, of lekker voor jezelf te houden.",
+      "mix": "gewoon",
+      "size": "middel",
+      "weightGrams": 500,
+      "priceCents": 1000,
+      "available": true
+    },
+    {
+      "id": "middel-zonder-gelatine",
+      "name": "Middelgroot doosje",
+      "description": "Het middelgrote formaat, gevuld met onze snoepmix zonder gelatine.",
+      "mix": "gelatinevrij",
+      "size": "middel",
+      "weightGrams": 500,
+      "priceCents": 1000,
       "available": true
     },
     {
       "id": "groot-gewoon",
       "name": "Groot doosje",
-      "description": "Groter formaat, voor wie liever wat meer geeft — of langer van geniet.",
+      "description": "Onze gewone snoepmix in het grootste doosje. Voor wie graag groots geeft, of lang geniet.",
       "mix": "gewoon",
       "size": "groot",
-      "priceCents": null,
+      "weightGrams": 800,
+      "priceCents": 1250,
       "available": true
     },
     {
       "id": "groot-zonder-gelatine",
       "name": "Groot doosje",
-      "description": "Groot formaat, zonder gelatine — zodat ook deze klanten volop kunnen kiezen.",
+      "description": "Ons grootste doosje, helemaal gevuld met de snoepmix zonder gelatine.",
       "mix": "gelatinevrij",
       "size": "groot",
-      "priceCents": null,
+      "weightGrams": 800,
+      "priceCents": 1250,
       "available": true
     }
   ]

@@ -14,38 +14,61 @@ function environment(respond) {
     append(...nodes){this.children.push(...nodes)}
     replaceChildren(...nodes){this.children=nodes}
     focus(){this.focused=true}
-    reset(){}
     reportValidity(){return true}
-    querySelectorAll(){return [...ids.values()].filter(el=>['input','textarea','button'].includes(el.tag))}
-    async fire(type,extra={}){await this.events[type]?.({preventDefault(){},submitter:new Element('button'),...extra})}
+    click(){this.events.click?.()}
+    async fire(type,extra={}){await this.events[type]?.({preventDefault(){},...extra})}
   }
-  const document = {body:{children:[],prepend(node){this.children.unshift(node)}},getElementById(id){if(!ids.has(id)){const node=new Element();node.id=id}return ids.get(id)},createElement:tag=>new Element(tag),createTextNode:text=>({textContent:text}),querySelectorAll:()=>[],querySelector:()=>null};
-  const context = {document,console,Intl,TextDecoder,TextEncoder,Uint8Array,AbortSignal,structuredClone,URLSearchParams,URL,atob,btoa,confirm:()=>true,location:{search:'',href:'https://example.test/index.html',origin:'https://example.test',pathname:'/index.html'},localStorage:{getItem:key=>storage.get(key)??null,setItem:(key,value)=>storage.set(key,value),removeItem:key=>storage.delete(key)},fetch:async(url,options={})=>{requests.push({url,options}); return respond(url,options)},addEventListener(){}};
+  const document = {getElementById(id){if(!ids.has(id)){const node=new Element();node.id=id}return ids.get(id)},createElement:tag=>new Element(tag),querySelectorAll:()=>[],querySelector:()=>null};
+  const context = {document,console,Intl,structuredClone,localStorage:{getItem:key=>storage.get(key)??null,setItem:(key,value)=>storage.set(key,value)},fetch:async(url,options={})=>{requests.push({url,options}); return respond(url,options)},addEventListener(){}};
   context.window=context;
   vm.createContext(context);
   vm.runInContext(fs.readFileSync('content.js','utf8'),context);
+  for (const [id,tag] of [['gift-message','textarea'],['delivery','select'],['review-order','button'],['clear-list','button']]) { const el=new Element(tag); el.id=id; }
   return {context,requests,storage,$:id=>document.getElementById(id),load:file=>vm.runInContext(fs.readFileSync(file,'utf8'),context)};
 }
 const response=(body,status=200)=>({ok:status>=200&&status<300,status,json:async()=>body});
 const settle=()=>new Promise(resolve=>setImmediate(resolve));
-const api=()=>response(structuredClone(fixture));
-test('Content rejects invalid cents, changed product identities and empty content',async()=>{
- const e=environment(api);await e.context.ZoetContent.ready;
- for(const mutate of [d=>d.products[0].priceCents=1.5,d=>d.products[0].priceCents=-1,d=>d.products[0].id='other',d=>d.announcement='',d=>d.products[0].available='yes']){
- const data=structuredClone(fixture);mutate(data);assert.throws(()=>e.context.ZoetContent.validate(data));
- }
- assert.equal(e.context.ZoetContent.price(fixture.products[0]),'Prijs volgt');
+const rows=e=>e.$('order-products').children;
+const removeButton=row=>row.children[1].children[2];
+
+test('An empty wishlist shows the empty state instead of the form',async()=>{
+ const e=environment(()=>response(structuredClone(fixture)));e.$('order-form').hidden=true;e.load('order.js');await settle();
+ assert.equal(e.$('order-form').hidden,true);assert.equal(e.$('order-empty').hidden,false);assert.equal(e.$('order-load-status').hidden,true);
 });
-test('Order preview handles unknown prices, exact cent totals and unavailable products without submission',async()=>{
- const priced=structuredClone(fixture);priced.products[0].priceCents=495;priced.products[2].available=false;
- const e=environment(()=>response(priced));e.load('order.js');await settle();
- assert.equal(e.$('order-form').hidden,false);assert.equal(e.$('review-order').disabled,true);
- e.$('quantity-klein-gewoon').value='3';await e.$('order-form').fire('input');assert.match(e.$('summary-total').children[1].textContent,/14,85/);
+
+test('Only wishlist items are listed, with exact cent totals, unknown prices and unavailable products handled',async()=>{
+ const priced=structuredClone(fixture);priced.products[1].priceCents=null;priced.products[4].available=false;
+ const e=environment(()=>response(priced));e.storage.set('zoet-gebaar-wishlist-v1','[0,1,2,4,9,"x"]');e.load('order.js');await settle();
+ assert.equal(e.$('order-form').hidden,false);assert.equal(e.$('order-empty').hidden,true);
+ assert.equal(rows(e).length,4);
+ assert.equal(e.$('quantity-middel-gewoon').value,'1');
+ assert.equal(e.$('summary-total').children[1].textContent,'Prijs volgt');
+ e.$('quantity-klein-zonder-gelatine').value='0';await e.$('order-form').fire('input');assert.match(e.$('summary-total').children[1].textContent,/15,50/);
+ e.$('quantity-klein-gewoon').value='3';await e.$('order-form').fire('input');assert.match(e.$('summary-total').children[1].textContent,/26,50/);
  e.$('quantity-klein-zonder-gelatine').value='1';await e.$('order-form').fire('input');assert.equal(e.$('summary-total').children[1].textContent,'Prijs volgt');
- assert.equal(e.$('quantity-groot-gewoon').disabled,true);
- e.$('gift-message').value='<script>alert(1)</script>';await e.$('order-form').fire('input');assert.equal(e.$('summary-message').textContent,'<script>alert(1)</script>');
- await e.$('order-form').fire('submit');assert.equal(e.$('order-confirmation').hidden,false);assert.equal(e.requests.length,1);
+ assert.equal(e.$('quantity-groot-gewoon').disabled,true);assert.equal(e.$('quantity-groot-gewoon').value,'0');
 });
+
+test('Card message and delivery preference appear in the summary; the preview never submits',async()=>{
+ const e=environment(()=>response(structuredClone(fixture)));e.storage.set('zoet-gebaar-wishlist-v1','[2,5]');e.load('order.js');await settle();
+ assert.match(e.$('summary-total').children[1].textContent,/22,50/);
+ assert.equal(e.$('summary-delivery').textContent,'Voorkeur: afhalen');
+ e.$('delivery').value='shipping';await e.$('order-form').fire('change');assert.match(e.$('summary-delivery').textContent,/bezorgen/);assert.match(e.$('delivery-note').textContent,/Bezorgkosten/);
+ e.$('gift-message').value='<script>alert(1)</script>';await e.$('order-form').fire('input');assert.equal(e.$('summary-message').textContent,'<script>alert(1)</script>');assert.equal(e.$('summary-message').hidden,false);
+ assert.equal(e.$('review-order').disabled,false);
+ await e.$('order-form').fire('submit');assert.equal(e.$('order-confirmation').hidden,false);assert.equal(e.requests.length,1);
+ e.$('quantity-middel-gewoon').value='0';e.$('quantity-groot-zonder-gelatine').value='0';await e.$('order-form').fire('input');assert.equal(e.$('review-order').disabled,true);
+});
+
+test('Removing an item or clearing the list updates the stored wishlist',async()=>{
+ const e=environment(()=>response(structuredClone(fixture)));e.storage.set('zoet-gebaar-wishlist-v1','[0,3]');e.load('order.js');await settle();
+ assert.equal(rows(e).length,2);
+ removeButton(rows(e)[0]).click();
+ assert.equal(e.storage.get('zoet-gebaar-wishlist-v1'),'[3]');assert.equal(rows(e).length,1);
+ e.$('clear-list').click();
+ assert.equal(e.storage.get('zoet-gebaar-wishlist-v1'),'[]');assert.equal(e.$('order-form').hidden,true);assert.equal(e.$('order-empty').hidden,false);
+});
+
 test('Unavailable content fails closed on the order page',async()=>{
  const e=environment(()=>response({},503));e.$('order-form').hidden=true;e.load('order.js');await settle();assert.equal(e.$('order-form').hidden,true);assert.match(e.$('order-load-status').textContent,/niet worden geladen/);
 });

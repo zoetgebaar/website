@@ -1,4 +1,4 @@
-// Shared navigation and a local wishlist. No orders or payments are submitted.
+// Shared navigation, the product filter and a local wishlist. No orders or payments are submitted.
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.querySelector('.menu-toggle');
   const links = document.querySelector('.links');
@@ -32,11 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const value = chips.some(chip => chip.dataset.filter === filter) ? filter : 'alle';
     chips.forEach(chip => chip.setAttribute('aria-pressed', String(chip.dataset.filter === value)));
     cards.forEach(card => { card.hidden = value !== 'alle' && card.dataset.mix !== value; });
-    count.textContent = `${cards.filter(card => !card.hidden).length} producten`;
+    const visible = cards.filter(card => !card.hidden).length;
+    count.textContent = `${visible} ${visible === 1 ? 'doosje' : 'doosjes'}`;
   }
   chips.forEach(chip => chip.addEventListener('click', () => filterProducts(chip.dataset.filter)));
   filterProducts(new URLSearchParams(location.search).get('mix'));
 
+  // The wishlist stores card positions, which match the fixed product order in data/content.json.
   const key = 'zoet-gebaar-wishlist-v1';
   let saved = [];
   try {
@@ -45,14 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch { /* The wishlist also works in memory when browser storage is unavailable. */ }
   const pill = document.querySelector('.cart-pill');
   const status = document.querySelector('#shop-status');
-  // Support a cached page that still renders the old button instead of a link.
-  if (pill.tagName === 'BUTTON') {
-    pill.addEventListener('click', () => {
-      const target = new URL('bestellen.html', location.href);
-      target.searchParams.set('v', '20260923-6');
-      location.assign(target.href);
-    });
-  }
   function render() {
     pill.querySelector('.count').textContent = saved.length;
     pill.classList.add('show');
@@ -64,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
       button.textContent = selected ? 'Bewaard in je lijstje ✓' : 'Bewaar in je lijstje';
     });
   }
-
   function persist() {
     try { localStorage.setItem(key, JSON.stringify(saved)); } catch { /* Keep current-session choices. */ }
     render();
@@ -73,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const exists = saved.includes(id);
     saved = exists ? saved.filter(value => value !== id) : [...saved, id];
     persist();
-    status.textContent = `${card.querySelector('h3').textContent} ${exists ? 'verwijderd uit' : 'bewaard in'} je lijstje.`;
+    status.textContent = `${card.querySelector('h3').textContent} (${card.querySelector('.weight')?.textContent ?? ''}) ${exists ? 'verwijderd uit' : 'bewaard in'} je lijstje.`;
   }));
   render();
   window.ZoetContent?.ready.then(render).catch(() => {});
