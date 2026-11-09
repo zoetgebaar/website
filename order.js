@@ -2,7 +2,7 @@
 (() => {
   const $ = id => document.getElementById(id);
   const key = 'zoet-gebaar-wishlist-v1';
-  const photo = {klein: 'assets/doosje-roze.jpg', middel: 'assets/doosje-kerst.jpg', groot: 'assets/doosje-zwart.jpg'};
+  const photo = {klein: 'assets/doosje-kerst.jpg', middel: 'assets/doosje-zwart.jpg', groot: 'assets/doosje-roze.jpg'};
   let all = [];
   let saved = [];
   const listed = () => all.filter((p, i) => saved.includes(i));
