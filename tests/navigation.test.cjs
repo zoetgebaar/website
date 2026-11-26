@@ -46,6 +46,6 @@ test('Filter from the URL hides the other mix and its group',()=>{
 });
 test('The shop links the wishlist straight to the order page',()=>{
  const html=fs.readFileSync('webshop.html','utf8');
- assert.match(html,/<a class="cart-pill" href="bestellen.html\?v=20261126-1"/);
+ assert.match(html,/<a class="cart-pill" href="bestellen.html\?v=20261126-2"/);
  assert.equal((html.match(/class="add-btn"/g)||[]).length,6);
 });

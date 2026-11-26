@@ -8,27 +8,27 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <title>Je bestelling | Zoet Gebaar</title>
   <link rel="icon" href="favicon.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=20261126-1">
-  <link rel="stylesheet" href="workspace.css?v=20261126-1">
+  <link rel="stylesheet" href="styles.css?v=20261126-2">
+  <link rel="stylesheet" href="workspace.css?v=20261126-2">
 </head>
 <body class="workspace">
   <a class="skip-link" href="#main">Ga naar inhoud</a>
-  <header class="site-header"><div class="nav wrap"><a class="brand" href="index.html?v=20261126-1" aria-label="Zoet Gebaar, naar de startpagina"><img class="brand-logo" src="assets/logo.jpg" alt="" width="46" height="46"><span class="brand-name">Zoet Gebaar</span></a><a class="text-link" href="webshop.html?v=20261126-1">Terug naar de doosjes</a></div></header>
+  <header class="site-header"><div class="nav wrap"><a class="brand" href="index.html?v=20261126-2" aria-label="Zoet Gebaar, naar de startpagina"><img class="brand-logo" src="assets/logo.jpg" alt="" width="46" height="46"><span class="brand-name">Zoet Gebaar</span></a><a class="text-link" href="webshop.html?v=20261126-2">Terug naar de doosjes</a></div></header>
   <main id="main" class="wrap workspace-main">
     <section class="order-intro"><h1>Maak er iets <em>persoonlijks</em> van.</h1><p class="lede">Dit zijn de doosjes uit je lijstje. Kies hoeveel je er wilt, schrijf iets liefs voor het kaartje en stuur je bestelling naar ons door.</p></section>
     <p id="order-load-status" role="status">De doosjes worden geladen.</p>
     <noscript><p>Schakel JavaScript in om je bestelling samen te stellen, of mail ons via info@zoetgebaar.be.</p></noscript>
-    <section id="order-empty" class="workspace-panel" hidden><h2>Je lijstje is nog leeg.</h2><p>Bewaar eerst een of meer doosjes bij de snoepdoosjes. Ze verschijnen dan hier.</p><a class="btn" href="webshop.html?v=20261126-1">Kies een doosje</a></section>
+    <section id="order-empty" class="workspace-panel" hidden><h2>Je lijstje is nog leeg.</h2><p>Bewaar eerst een of meer doosjes bij de snoepdoosjes. Ze verschijnen dan hier.</p><a class="btn" href="webshop.html?v=20261126-2">Kies een doosje</a></section>
     <form id="order-form" class="order-layout" novalidate hidden>
       <div>
-        <section class="workspace-panel order-step"><h2>Jouw doosjes</h2><div id="order-products"></div><div class="order-actions"><a class="text-link" href="webshop.html?v=20261126-1">Nog een doosje toevoegen</a><button id="clear-list" class="btn btn-outline" type="button">Lijstje leegmaken</button></div></section>
+        <section class="workspace-panel order-step"><h2>Jouw doosjes</h2><div id="order-products"></div><div class="order-actions"><a class="text-link" href="webshop.html?v=20261126-2">Nog een doosje toevoegen</a><button id="clear-list" class="btn btn-outline" type="button">Lijstje leegmaken</button></div></section>
         <section class="workspace-panel order-step"><h2>Het kaartje</h2><div class="field"><label for="gift-message">Jouw boodschap <span class="optional">(optioneel, max. 200 tekens)</span></label><textarea id="gift-message" maxlength="200" rows="4" placeholder="Voor jou, omdat jij jij bent."></textarea><p class="field-hint">Deze boodschap geldt voor alle doosjes in deze bestelling.</p></div></section>
         <section class="workspace-panel order-step"><h2>Jouw gegevens</h2>
           <div class="form-grid">
             <div class="field"><label for="order-name">Naam</label><input id="order-name" autocomplete="name" required></div>
             <div class="field"><label for="order-email">Mailadres</label><input id="order-email" type="email" autocomplete="email" required></div>
             <div class="field"><label for="order-phone">Telefoonnummer <span class="optional">(optioneel)</span></label><input id="order-phone" type="tel" autocomplete="tel"></div>
-            <div class="field full"><label for="order-pickup">Waar of wanneer wil je afhalen? <span class="optional">(optioneel)</span></label><textarea id="order-pickup" rows="3" maxlength="300"></textarea><p class="field-hint">Je haalt je bestelling af op een van onze verkoopmomenten. <a href="index.html?v=20261126-1#agenda">Bekijk de agenda.</a></p></div>
+            <div class="field full"><label for="order-pickup">Waar of wanneer wil je afhalen? <span class="optional">(optioneel)</span></label><textarea id="order-pickup" rows="3" maxlength="300"></textarea><p class="field-hint">Je haalt je bestelling af op een van onze verkoopmomenten. <a href="index.html?v=20261126-2#agenda">Bekijk de agenda.</a></p></div>
           </div>
           <input type="text" id="order-honey" tabindex="-1" autocomplete="off" aria-hidden="true" class="honey">
         </section>
@@ -36,6 +36,6 @@
       <aside class="workspace-panel order-summary" aria-label="Besteloverzicht"><h2>Overzicht</h2><div id="summary-items"></div><div id="summary-total" class="summary-row summary-total" aria-live="polite"></div><p id="price-note" class="field-hint"></p><p id="summary-message" class="summary-message" hidden></p><p class="field-hint">We bevestigen je bestelling eerst per mail. Daarin spreken we ook het afhalen en betalen af.</p><button id="review-order" class="btn" type="submit" disabled>Bestelling versturen</button><p id="order-error" class="field-error" role="alert" hidden></p><div id="order-confirmation" class="order-confirmation" role="status" tabindex="-1" hidden><h3>Bedankt, je bestelling is verstuurd.</h3><p>We bekijken ze zo snel mogelijk en bevestigen per mail waar en wanneer je ze kunt afhalen.</p></div></aside>
     </form>
   </main>
-  <script src="content.js?v=20261126-1"></script><script src="order.js?v=20261126-1"></script>
+  <script src="content.js?v=20261126-2"></script><script src="order.js?v=20261126-2"></script>
 </body>
 </html>
