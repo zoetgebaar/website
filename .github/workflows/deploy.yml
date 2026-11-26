@@ -1,0 +1,81 @@
+name: Website naar Enhance
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-enhance
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Tests
+        run: node --test tests/*.test.cjs
+
+      - name: PHP controleren
+        run: for f in api/*.php; do php -l "$f"; done
+
+      - name: Websitebestanden klaarzetten
+        run: |
+          mkdir dist
+          rsync -a --exclude-from=.deployignore ./ dist/
+
+      - name: Mailinstellingen schrijven
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+        run: |
+          if [ -z "$SMTP_HOST" ] || [ -z "$SMTP_USER" ] || [ -z "$SMTP_PASSWORD" ]; then
+            echo "::warning::SMTP-secrets ontbreken. De site wordt geüpload, maar de formulieren tonen dat ze nog niet ingesteld zijn."
+            exit 0
+          fi
+          php -r '
+            $c = [
+              "smtp_host" => getenv("SMTP_HOST"),
+              "smtp_port" => (int) (getenv("SMTP_PORT") ?: 465),
+              "smtp_secure" => getenv("SMTP_SECURE") ?: "ssl",
+              "smtp_user" => getenv("SMTP_USER"),
+              "smtp_password" => getenv("SMTP_PASSWORD"),
+              "from" => getenv("SMTP_USER"),
+              "to" => getenv("MAIL_TO") ?: "info@zoetgebaar.be",
+            ];
+            file_put_contents("dist/api/config.php", "<?php\nreturn " . var_export($c, true) . ";\n");
+          '
+
+      - name: Uploaden naar Enhance (SFTP)
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_PORT: ${{ secrets.SFTP_PORT }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          SFTP_PATH: ${{ secrets.SFTP_PATH }}
+        run: |
+          if [ -z "$SFTP_HOST" ] || [ -z "$SFTP_USER" ] || [ -z "$LFTP_PASSWORD" ]; then
+            echo "::error::Stel de secrets SFTP_HOST, SFTP_USER en SFTP_PASSWORD in (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          lftp -c "
+            set sftp:auto-confirm yes
+            set net:max-retries 2
+            set net:timeout 30
+            open --env-password -u '$SFTP_USER' -p '${SFTP_PORT:-22}' 'sftp://$SFTP_HOST'
+            mirror --reverse --delete --verbose=1 --exclude-glob .well-known/ --exclude-glob .user.ini --exclude-glob cgi-bin/ dist/ '${SFTP_PATH:-public_html}'
+          "

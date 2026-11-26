@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f0e5">
+<meta name="description" content="Snoepdoosjes op maat voor bedrijven: kies het aantal, de kleur van het lint en voeg jullie logo toe. Vraag een offerte aan bij Zoet Gebaar.">
+<title>Voor bedrijven | Zoet Gebaar</title>
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="styles.css?v=20261126-1">
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('has-motion');setTimeout(function(){if(!window.__zoetMotion)document.documentElement.classList.remove('has-motion')},2500)}</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Ga naar inhoud</a>
+<div class="announcement"><a href="https://www.vrt.be/nl/de-warmste-week" target="_blank" rel="noopener"><p>Ten voordele van De Warmste Week</p><img src="assets/logo-de-warmste-week-klein.png" alt="" width="38" height="29"></a></div>
+<header class="site-header"><div class="nav wrap"><a class="brand" href="index.html?v=20261126-1" aria-label="Zoet Gebaar, naar de startpagina"><img class="brand-logo" src="assets/logo.jpg" alt="" width="46" height="46"><span class="brand-name">Zoet Gebaar</span></a><nav class="links" id="main-nav" aria-label="Hoofdnavigatie"><a href="webshop.html?v=20261126-1">De snoepdoosjes</a><a href="index.html?v=20261126-1#agenda">Agenda</a><a href="bedrijven.html?v=20261126-1" aria-current="page">Voor bedrijven</a><a href="goed-doel.html?v=20261126-1">Goed doel</a><a href="over-ons.html?v=20261126-1">Ons verhaal</a></nav><a class="btn nav-cta" href="webshop.html?v=20261126-1">Bestellen</a><button class="menu-toggle" type="button" aria-label="Menu openen" aria-controls="main-nav" aria-expanded="false"><span></span><span></span></button></div></header>
+<main id="main">
+  <section class="wrap page-hero" data-hero>
+    <h1 data-split>Een zoet gebaar <em>voor bedrijven.</em></h1>
+    <div data-hero-item>
+      <p class="lede">Bedank je klanten, verras je collega's of zoek je een relatiegeschenk met een persoonlijke toets? We vullen de doosjes in het aantal dat je nodig hebt, met een lint in jullie kleur en jullie logo.</p>
+      <div class="button-row"><a class="btn" href="#aanvraag">Vraag een offerte aan <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="steps steps-3">
+      <div class="step" data-reveal><h3>Aantal naar keuze</h3><p>Je kiest zelf hoeveel doosjes je nodig hebt, in één formaat of gemengd.</p></div>
+      <div class="step" data-reveal><h3>Lint in jullie kleur</h3><p>Kies de lintkleur die past bij jullie huisstijl of bij de gelegenheid.</p></div>
+      <div class="step" data-reveal><h3>Met jullie logo</h3><p>Stuur jullie logo mee. We bekijken samen hoe we het op de doosjes verwerken.</p></div>
+    </div>
+  </section>
+
+  <section class="section section-tint" id="aanvraag">
+    <div class="wrap form-layout">
+      <div class="form-aside">
+        <h2 data-split>Vraag een <em>offerte</em> aan.</h2>
+        <p data-reveal>Vul het formulier in en we sturen je zo snel mogelijk een voorstel op maat.</p>
+        <p data-reveal>Liever mailen? Dat kan via <a href="mailto:info@zoetgebaar.be">info@zoetgebaar.be</a>.</p>
+      </div>
+
+      <div>
+        <div class="form-success" id="business-success" role="status" tabindex="-1" hidden>
+          <h2>Bedankt voor je aanvraag.</h2>
+          <p>We hebben alles goed ontvangen en nemen zo snel mogelijk contact met je op.</p>
+          <div class="button-row"><a class="btn btn-outline" href="index.html?v=20261126-1">Terug naar de startpagina</a></div>
+        </div>
+
+        <form class="form-card" id="business-form" action="api/send.php" method="POST" enctype="multipart/form-data" data-reveal>
+          <input type="hidden" name="type" value="bedrijf">
+          <input type="hidden" name="MAX_FILE_SIZE" value="5242880">
+          <input type="text" name="website" class="honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="form-grid">
+            <div class="field"><label for="bedrijf">Bedrijfsnaam</label><input id="bedrijf" name="bedrijf" autocomplete="organization" required></div>
+            <div class="field"><label for="contact">Contactpersoon</label><input id="contact" name="contactpersoon" autocomplete="name" required></div>
+            <div class="field"><label for="email">Mailadres</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+            <div class="field"><label for="telefoon">Telefoonnummer <span class="optional">(optioneel)</span></label><input id="telefoon" name="telefoon" type="tel" autocomplete="tel"></div>
+            <div class="field"><label for="aantal">Hoeveel doosjes?</label><input id="aantal" name="aantal" type="number" min="1" max="5000" step="1" inputmode="numeric" required></div>
+            <div class="field"><label for="datum">Tegen wanneer? <span class="optional">(optioneel)</span></label><input id="datum" name="datum" type="date"></div>
+            <div class="field"><label for="formaat">Formaat</label><select id="formaat" name="formaat"><option>Weet ik nog niet</option><option>Klein doosje (350 gram)</option><option>Middelgroot doosje (500 gram)</option><option>Groot doosje (800 gram)</option><option>Een mix van formaten</option></select></div>
+            <div class="field"><label for="mix">Snoepmix</label><select id="mix" name="snoepmix"><option>Weet ik nog niet</option><option>Met gelatine</option><option>Gelatinevrij</option><option>Allebei</option></select></div>
+            <fieldset class="full">
+              <legend>Kleur van het lint</legend>
+              <div class="swatches">
+                <label class="swatch"><input type="radio" name="lintkleur" value="Rood" required><span style="--swatch:#b3312b">Rood</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Roze"><span style="--swatch:#e9a7b6">Roze</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Zwart"><span style="--swatch:#1f1a17">Zwart</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Goud"><span style="--swatch:#c9a24a">Goud</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Groen"><span style="--swatch:#2f5d3a">Groen</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Blauw"><span style="--swatch:#2d4f7c">Blauw</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Wit"><span style="--swatch:#f6f2ea">Wit</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Andere kleur"><span style="--swatch:conic-gradient(#b3312b,#c9a24a,#2f5d3a,#2d4f7c,#e9a7b6,#b3312b)">Andere kleur</span></label>
+              </div>
+            </fieldset>
+            <div class="field full" id="other-color" hidden><label for="kleur-anders">Welke kleur?</label><input id="kleur-anders" name="lintkleur_anders" placeholder="Bijvoorbeeld onze huisstijlkleur #0a5c8f"></div>
+            <div class="field full"><label for="logo">Logo <span class="optional">(optioneel)</span></label><input id="logo" name="logo" type="file" accept="image/png,image/jpeg,image/svg+xml,application/pdf"><p class="field-hint">PNG, JPG, SVG of PDF, maximaal 5 MB.</p><p class="field-error" id="logo-error" hidden>Dit bestand is groter dan 5 MB. Kies een kleiner bestand of mail het logo naar info@zoetgebaar.be.</p></div>
+            <div class="field full"><label for="bericht">Nog iets dat we moeten weten? <span class="optional">(optioneel)</span></label><textarea id="bericht" name="bericht" rows="4"></textarea></div>
+          </div>
+          <div class="form-footer">
+            <button class="btn" type="submit" id="business-submit">Aanvraag versturen <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <p class="field-hint">We gebruiken je gegevens alleen om je aanvraag te beantwoorden.</p>
+            <p class="field-error" id="business-error" role="alert" hidden></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand"><a class="brand" href="index.html?v=20261126-1"><img class="brand-logo" src="assets/logo.jpg" alt="" width="46" height="46" loading="lazy"><span class="brand-name">Zoet Gebaar</span></a><p>Een studentenonderneming van VIVES Hogeschool, met verkoop van 1 december tot 31 mei.</p></div>
+    <div><h2 class="footer-title">Ontdek</h2><nav class="footer-links" aria-label="Footernavigatie"><a href="webshop.html?v=20261126-1">De snoepdoosjes</a><a href="index.html?v=20261126-1#agenda">Agenda</a><a href="bedrijven.html?v=20261126-1">Voor bedrijven</a><a href="goed-doel.html?v=20261126-1">Goed doel</a><a href="over-ons.html?v=20261126-1">Ons verhaal</a></nav></div>
+    <div><h2 class="footer-title">Contact</h2><a class="footer-mail" href="mailto:info@zoetgebaar.be">info@zoetgebaar.be</a><div class="socials"><a href="https://www.instagram.com/zoet.gebaar/" target="_blank" rel="noopener" aria-label="Zoet Gebaar op Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a href="https://www.facebook.com/share/1DzBTi725m/" target="_blank" rel="noopener" aria-label="Zoet Gebaar op Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21z"/></svg></a><a href="https://www.linkedin.com/in/zoet-gebaar-08584644b/" target="_blank" rel="noopener" aria-label="Zoet Gebaar op LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.94 8.5H3.56V20h3.38V8.5ZM5.25 3a1.97 1.97 0 1 0 0 3.94 1.97 1.97 0 0 0 0-3.94ZM20.44 13.4c0-3.1-1.66-4.9-4.33-4.9-1.6 0-2.62.86-3.06 1.6V8.5H9.7V20h3.36v-6.1c0-1.6.6-2.6 1.94-2.6 1.3 0 1.98.92 1.98 2.6V20h3.46v-6.6Z"/></svg></a></div></div>
+  </div>
+  <div class="wrap footer-bottom"><span>© 2026 Zoet Gebaar</span><span>powered by <a href="https://webworxcabbeke.be" target="_blank" rel="noopener">WebWorx Cabbeke</a></span></div>
+</footer>
+<script src="assets/vendor/gsap.min.js?v=20261126-1"></script>
+<script src="assets/vendor/ScrollTrigger.min.js?v=20261126-1"></script>
+<script src="assets/vendor/SplitText.min.js?v=20261126-1"></script>
+<script src="content.js?v=20261126-1"></script>
+<script src="site.js?v=20261126-1"></script>
+<script src="business.js?v=20261126-1"></script>
+<script src="motion.js?v=20261126-1"></script>
+</body>
+</html>

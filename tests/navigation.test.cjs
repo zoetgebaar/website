@@ -7,34 +7,45 @@ class Element {
   addEventListener(type,fn){this.events[type]=fn}
   setAttribute(k,v){this.attributes[k]=v}
   querySelector(s){return this.nodes[s]}
+  contains(){return false}
   focus(){this.focused=true}
   click(){this.events.click?.({target:this})}
 }
-function setup(storage='[]',search=''){
- const nodes={};for(const k of ['.menu-toggle','.links','.product-count','.cart-pill','#shop-status'])nodes[k]=new Element();
+const ids=['klein-gewoon','middel-gewoon','groot-gewoon','klein-zonder-gelatine','middel-zonder-gelatine','groot-zonder-gelatine'];
+function setup(storage={},search=''){
+ const nodes={};for(const k of ['.menu-toggle','.links','.site-header','.product-count','.cart-pill','#shop-status'])nodes[k]=new Element();
  nodes['.cart-pill'].nodes['.count']=new Element();
- const cards=Array.from({length:6},(_,i)=>{const card=new Element();card.dataset.mix=i%2?'gelatinevrij':'gewoon';for(const k of ['.add-btn','h3','.weight'])card.nodes[k]=new Element();card.nodes.h3.textContent=['Klein','Klein','Middelgroot','Middelgroot','Groot','Groot'][i]+' doosje';return card});
+ const cards=ids.map((id,i)=>{const card=new Element();card.dataset.product=id;card.dataset.mix=i<3?'gewoon':'gelatinevrij';for(const k of ['.add-btn','.name','.variant'])card.nodes[k]=new Element();card.nodes['.name'].textContent=id;card.nodes['.variant'].textContent=i<3?'Met gelatine':'Gelatinevrij';return card});
+ const groups=['gewoon','gelatinevrij'].map(m=>{const g=new Element();g.dataset.mix=m;return g});
  const chips=['alle','gewoon','gelatinevrij'].map(f=>{const e=new Element();e.dataset.filter=f;return e});
- const doc={querySelector:s=>nodes[s],querySelectorAll:s=>s==='.shop-card'?cards:chips,addEventListener:(t,fn)=>{if(t==='DOMContentLoaded')doc.ready=fn}};
- let data=storage;
- vm.runInNewContext(fs.readFileSync('site.js','utf8'),{document:doc,window:{matchMedia:()=>({addEventListener(){}})},localStorage:{getItem:()=>data,setItem:(_,value)=>data=value},location:{search},URLSearchParams});doc.ready();return{nodes,cards,chips,data:()=>data};
+ const doc={documentElement:new Element(),activeElement:null,querySelector:s=>nodes[s],querySelectorAll:s=>s==='.shop-card'?cards:s==='.shop-group'?groups:chips,addEventListener:(t,fn)=>{if(t==='DOMContentLoaded')doc.ready=fn}};
+ const data={...storage};
+ const win={scrollY:0,matchMedia:()=>({addEventListener(){}}),addEventListener(){}};
+ vm.runInNewContext(fs.readFileSync('site.js','utf8'),{document:doc,window:win,localStorage:{getItem:k=>data[k]??null,setItem:(k,v)=>data[k]=v},location:{search},URLSearchParams});doc.ready();return{nodes,cards,groups,chips,data};
 }
-test('Wishlist stays visible when empty, persists selections and ignores stale ids',()=>{
- const t=setup('[1, 9, "x", 1]');
- assert.equal(t.nodes['.cart-pill'].classList.contains('show'),true);
+test('Wishlist stores product ids and ignores unknown ones',()=>{
+ const t=setup({'zoet-gebaar-wishlist-v2':'["middel-zonder-gelatine","nope","middel-zonder-gelatine"]'});
  assert.equal(t.nodes['.cart-pill'].nodes['.count'].textContent,1);
- t.cards[5].nodes['.add-btn'].click();assert.equal(t.data(),'[1,5]');
- assert.equal(t.cards[5].nodes['.add-btn'].textContent,'Bewaard in je lijstje ✓');
- t.cards[1].nodes['.add-btn'].click();assert.equal(t.data(),'[5]');
+ t.cards[5].nodes['.add-btn'].click();assert.equal(t.data['zoet-gebaar-wishlist-v2'],'["middel-zonder-gelatine","groot-zonder-gelatine"]');
+ assert.equal(t.cards[5].nodes['.add-btn'].textContent,'In je lijstje');
+ assert.match(t.nodes['#shop-status'].textContent,/gelatinevrij, bewaard in je lijstje/);
+ t.cards[4].nodes['.add-btn'].click();assert.equal(t.data['zoet-gebaar-wishlist-v2'],'["groot-zonder-gelatine"]');
 });
-test('Filter from the URL hides the other mix and counts the six boxes',()=>{
- const t=setup('[]','?mix=gelatinevrij');
- assert.deepEqual(t.cards.map(c=>c.hidden),[true,false,true,false,true,false]);
+test('An old wishlist with positions is migrated to product ids',()=>{
+ const t=setup({'zoet-gebaar-wishlist-v1':'[1,4]'});
+ assert.equal(t.nodes['.cart-pill'].nodes['.count'].textContent,2);
+ t.cards[0].nodes['.add-btn'].click();
+ assert.deepEqual(JSON.parse(t.data['zoet-gebaar-wishlist-v2']).sort(),['groot-gewoon','klein-gewoon','klein-zonder-gelatine']);
+});
+test('Filter from the URL hides the other mix and its group',()=>{
+ const t=setup({},'?mix=gelatinevrij');
+ assert.deepEqual(t.cards.map(c=>c.hidden),[true,true,true,false,false,false]);
+ assert.deepEqual(t.groups.map(g=>g.hidden),[true,false]);
  assert.equal(t.nodes['.product-count'].textContent,'3 doosjes');
  t.chips[0].click();assert.equal(t.nodes['.product-count'].textContent,'6 doosjes');
 });
-test('The shop links the wishlist straight to the order preview',()=>{
+test('The shop links the wishlist straight to the order page',()=>{
  const html=fs.readFileSync('webshop.html','utf8');
- assert.match(html,/<a class="cart-pill show" href="bestellen.html\?v=20261109-2"/);
+ assert.match(html,/<a class="cart-pill" href="bestellen.html\?v=20261126-1"/);
  assert.equal((html.match(/class="add-btn"/g)||[]).length,6);
 });
