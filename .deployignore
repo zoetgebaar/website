@@ -1,0 +1,12 @@
+.git/
+.github/
+.gitignore
+.deployignore
+.claude/
+tests/
+README.md
+*.docx
+api/config.example.php
+api/config.php
+dist/
+node_modules/

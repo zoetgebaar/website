@@ -81,9 +81,11 @@ test('Pages share one release version, contact details and the agreed wording', 
 
 test('The business form collects quantity, ribbon colour and an optional logo', () => {
   const html = pages.find(([file]) => file === 'bedrijven.html')[1];
-  assert.match(html, /action="https:\/\/formsubmit\.co\/info@zoetgebaar\.be"/);
+  assert.match(html, /action="api\/send\.php"/);
+  assert.match(html, /name="type" value="bedrijf"/);
+  assert.doesNotMatch(html, /formsubmit/);
   assert.match(html, /enctype="multipart\/form-data"/);
-  assert.match(html, /name="Aantal doosjes" type="number"[^>]*required/);
-  assert.match(html, /name="Lintkleur"/);
+  assert.match(html, /name="aantal" type="number"[^>]*required/);
+  assert.match(html, /name="lintkleur"/);
   assert.match(html, /type="file"/);
 });

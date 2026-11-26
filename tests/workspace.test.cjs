@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const fixture = JSON.parse(fs.readFileSync('data/content.json', 'utf8'));
 const KEY = 'zoet-gebaar-wishlist-v2';
-function environment(respond, sendResult = {success: 'true'}) {
+function environment(respond, sendResult = {ok: true}) {
   const ids = new Map(); const requests = []; const storage = new Map();
   class Element {
     constructor(tag='div') { this.tag=tag; this.children=[]; this.events={}; this.value=''; this.textContent=''; this.hidden=false; this.disabled=false; this.attributes={}; }
@@ -19,8 +19,8 @@ function environment(respond, sendResult = {success: 'true'}) {
     async fire(type,extra={}){await this.events[type]?.({preventDefault(){},...extra})}
   }
   const document = {getElementById(id){if(!ids.has(id)){const node=new Element();node.id=id}return ids.get(id)},createElement:tag=>new Element(tag),createTextNode:text=>({text}),querySelectorAll:()=>[],querySelector:()=>null};
-  const context = {document,console,Intl,structuredClone,JSON,localStorage:{getItem:key=>storage.get(key)??null,setItem:(key,value)=>storage.set(key,value)},
-    fetch:async(url,options={})=>{requests.push({url,options}); if(url.startsWith('https://formsubmit.co')) return {ok:true,json:async()=>sendResult}; return respond(url,options)},addEventListener(){}};
+  const context = {document,console,Intl,structuredClone,JSON,FormData,localStorage:{getItem:key=>storage.get(key)??null,setItem:(key,value)=>storage.set(key,value)},
+    fetch:async(url,options={})=>{requests.push({url,options}); if(url==='api/send.php') return {ok:sendResult.ok!==false,json:async()=>sendResult}; return respond(url,options)},addEventListener(){}};
   context.window=context;
   vm.createContext(context);
   vm.runInContext(fs.readFileSync('content.js','utf8'),context);
@@ -62,18 +62,25 @@ test('Sending requires a name and a valid address, then mails the order once',as
  e.$('order-name').value='Lien';e.$('order-email').value='geen-adres';await e.$('order-form').fire('submit');assert.match(e.$('order-error').textContent,/geldig/);assert.equal(e.requests.length,1);
  e.$('order-email').value='lien@example.com';await e.$('order-form').fire('submit');
  assert.equal(e.requests.length,2);
- const sent=JSON.parse(e.requests[1].options.body);
- assert.equal(e.requests[1].url,'https://formsubmit.co/ajax/info@zoetgebaar.be');
- assert.equal(sent.Naam,'Lien');assert.equal(sent.email,'lien@example.com');assert.match(sent.Bestelling,/1 x Middelgroot doosje, met gelatine, 500 gram/);assert.match(sent.Totaal,/23,00/);
+ const sent=e.requests[1].options.body;
+ assert.equal(e.requests[1].url,'api/send.php');
+ assert.equal(sent.get('type'),'bestelling');assert.equal(sent.get('naam'),'Lien');assert.equal(sent.get('email'),'lien@example.com');assert.equal(sent.get('kaartje'),'<script>alert(1)</script>');
+ assert.deepEqual(JSON.parse(sent.get('items')),[{id:'middel-gewoon',qty:1},{id:'groot-zonder-gelatine',qty:1}]);
  assert.equal(e.$('order-confirmation').hidden,false);assert.equal(e.$('review-order').disabled,true);assert.equal(e.storage.get(KEY),'[]');
  await e.$('order-form').fire('submit');assert.equal(e.requests.length,2);
 });
 
 test('A failed send keeps the order and shows a fallback',async()=>{
- const e=environment(()=>response(structuredClone(fixture)),{success:'false'});e.storage.set(KEY,'["klein-gewoon"]');e.load('order.js');await settle();
+ const e=environment(()=>response(structuredClone(fixture)),{ok:false});e.storage.set(KEY,'["klein-gewoon"]');e.load('order.js');await settle();
  e.$('order-name').value='Lien';e.$('order-email').value='lien@example.com';await e.$('order-form').fire('submit');
  assert.equal(e.$('order-confirmation').hidden,true);assert.match(e.$('order-error').textContent,/info@zoetgebaar\.be/);assert.equal(e.$('review-order').disabled,false);
  assert.equal(e.storage.get(KEY),'["klein-gewoon"]');
+});
+
+test('A message from the server is shown when sending is refused',async()=>{
+ const e=environment(()=>response(structuredClone(fixture)),{ok:false,message:'Je hebt al enkele berichten verstuurd. Probeer het binnen tien minuten opnieuw.'});e.storage.set(KEY,'["klein-gewoon"]');e.load('order.js');await settle();
+ e.$('order-name').value='Lien';e.$('order-email').value='lien@example.com';await e.$('order-form').fire('submit');
+ assert.match(e.$('order-error').textContent,/tien minuten/);
 });
 
 test('Removing an item or clearing the list updates the stored wishlist',async()=>{

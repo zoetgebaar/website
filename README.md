@@ -1,6 +1,6 @@
 # Zoet Gebaar
 
-Static website served by GitHub Pages from `main` (domain: zoetgebaar.be, mailbox info@zoetgebaar.be). Zoet Gebaar is a student enterprise (studentenonderneming) of VIVES Hogeschool, run by Aylien, Shaunie and Aelis. Slogan: “Waar zoet een gebaar wordt.”
+Static website with one small PHP mail script, hosted on Enhance at zoetgebaar.be (mailbox info@zoetgebaar.be). Every push to `main` is deployed automatically (see Deployment). Zoet Gebaar is a student enterprise (studentenonderneming) of VIVES Hogeschool, run by Aylien, Shaunie and Aelis. Slogan: “Waar zoet een gebaar wordt.”
 
 ## Pages
 
@@ -13,18 +13,39 @@ Static website served by GitHub Pages from `main` (domain: zoetgebaar.be, mailbo
 
 ## Forms
 
-Both forms use [FormSubmit](https://formsubmit.co) and arrive at info@zoetgebaar.be. The first submission of each form triggers an activation e-mail to that address; click the link once, and later submissions are delivered. The business form posts multipart data (so the logo arrives as an attachment, max 5 MB checked in `business.js`) and redirects back with `?verzonden=1`. The order page posts JSON to the AJAX endpoint (`order.js`); the CSP on `bestellen.html` allows only that origin. Both forms have a honeypot field.
+Both forms post to `api/send.php`, which mails them to info@zoetgebaar.be over SMTP with PHPMailer 7.2 (vendored in `api/lib/PHPMailer`). The order form sends only product IDs and quantities; the script recalculates names, weights and totals from `data/content.json`. The business form posts multipart data with an optional logo (PNG, JPG, SVG or PDF, max 5 MB, checked by content type). Without JavaScript the business form still works and redirects to `bedrijven.html?verzonden=1`. Protection: a hidden honeypot field (`website`), strict validation and a limit of 5 submissions per IP address per 10 minutes. The reply address of each mail is the customer, so the team can answer directly.
+
+SMTP settings live in `api/config.php` (see `api/config.example.php`). That file is never committed; the deploy workflow writes it from GitHub secrets.
 
 ## Content and development
 
 `data/content.json` is the published source for the announcement, intro, shop note and the six products (name, description, weight in grams, price in integer cents, availability). `null` prices mean “Prijs volgt”. Product IDs and their order are fixed and validated by `content.js`; the HTML carries the same texts as a fallback. Content is inserted as text, never HTML. The wishlist stores product IDs under `zoet-gebaar-wishlist-v2` and migrates the older position-based list.
 
 ```sh
-npx http-server -p 8000   # or: python3 -m http.server 8000 --bind 127.0.0.1
+php -S 127.0.0.1:8000     # serves the site and api/send.php
 node --test tests/*.test.cjs
 ```
 
 Use HTTP rather than `file://`, as the site loads content with `fetch`. Tests cover content validation, wishlist and filter, the order page (validation, sending, failure) and the wording rules: no long dashes, no hyphen used as a dash, no eyebrow labels and no middle dots between words.
+
+## Deployment (Enhance)
+
+`.github/workflows/deploy.yml` runs on every push to `main` (and by hand under Actions). It runs the tests, checks the PHP, copies the site without the files listed in `.deployignore`, writes `api/config.php` and mirrors everything over SFTP to the web root. Files on the server that are no longer in the repo are removed, except `.well-known/`, `.user.ini` and `cgi-bin/`.
+
+Repository secrets (Settings, Secrets and variables, Actions):
+
+| Secret | Value |
+| --- | --- |
+| `SFTP_HOST` | SFTP server of the Enhance website |
+| `SFTP_PORT` | optional, default 22 |
+| `SFTP_USER` / `SFTP_PASSWORD` | SFTP login of the website in Enhance |
+| `SFTP_PATH` | optional, default `public_html` |
+| `SMTP_HOST` | mail server of info@zoetgebaar.be |
+| `SMTP_PORT` / `SMTP_SECURE` | optional, default 465 / `ssl` (use 587 / `tls` for STARTTLS) |
+| `SMTP_USER` / `SMTP_PASSWORD` | login of the mailbox |
+| `MAIL_TO` | optional, default info@zoetgebaar.be |
+
+Without the SMTP secrets the site is still deployed; the forms then answer that they are not set up yet.
 
 ## Motion
 

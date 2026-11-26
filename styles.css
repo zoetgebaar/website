@@ -361,3 +361,4 @@ fieldset legend { margin-bottom: 12px; padding: 0; }
 @media (max-width: 640px) { .info-block.wide { grid-template-columns: minmax(0, 1fr); } .info-block.wide .partner-logo { height: 120px; } }
 /* SplitText masks clip at the line box; give descenders (g, j, p) and italic overhangs room without moving the layout. */
 .split-line-mask { padding: 0 .12em .2em; margin: 0 -.12em -.2em; }
+.honey { position: absolute; left: -9999px; width: 1px; height: 1px; }

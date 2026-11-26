@@ -1,8 +1,8 @@
 // Order page: the boxes saved in the wishlist, with quantities, a card message and contact details.
-// The order is e-mailed to info@zoetgebaar.be through FormSubmit; nothing is paid online.
+// api/send.php mails the order to info@zoetgebaar.be and recalculates it from data/content.json; nothing is paid online.
 (() => {
   const $ = id => document.getElementById(id);
-  const ENDPOINT = 'https://formsubmit.co/ajax/info@zoetgebaar.be';
+  const ENDPOINT = 'api/send.php';
   const key = 'zoet-gebaar-wishlist-v2';
   const legacyKey = 'zoet-gebaar-wishlist-v1';
   const legacyOrder = ['klein-gewoon', 'klein-zonder-gelatine', 'middel-gewoon', 'middel-zonder-gelatine', 'groot-gewoon', 'groot-zonder-gelatine'];
@@ -79,19 +79,16 @@
     $('order-error').hidden = false;
   }
   function payload(selected) {
-    const total = totals(selected);
-    return {
-      _subject: 'Nieuwe bestelling via de website',
-      _template: 'table',
-      _captcha: 'false',
-      Naam: $('order-name').value.trim(),
-      email: $('order-email').value.trim(),
-      Telefoon: $('order-phone').value.trim() || 'Niet opgegeven',
-      Bestelling: selected.map(({product, quantity}) => `${quantity} x ${label(product)}`).join('\n'),
-      Totaal: total.text,
-      Kaartje: $('gift-message').value.trim() || 'Geen boodschap',
-      Afhalen: $('order-pickup').value.trim() || 'Nog af te spreken',
-    };
+    const data = new FormData();
+    data.append('type', 'bestelling');
+    data.append('naam', $('order-name').value.trim());
+    data.append('email', $('order-email').value.trim());
+    data.append('telefoon', $('order-phone').value.trim());
+    data.append('kaartje', $('gift-message').value.trim());
+    data.append('afhalen', $('order-pickup').value.trim());
+    data.append('items', JSON.stringify(selected.map(({product, quantity}) => ({id: product.id, qty: quantity}))));
+    data.append('website', $('order-honey').value);
+    return data;
   }
 
   ZoetContent.ready.then(content => {
@@ -117,15 +114,17 @@
     if ($('order-honey').value) { $('order-confirmation').hidden = false; return; }
     sending = true; updateSummary();
     $('review-order').textContent = 'Bezig met versturen';
+    let failure = 'Je bestelling kon niet worden verstuurd. Probeer het opnieuw of mail ons via info@zoetgebaar.be.';
     try {
-      const response = await fetch(ENDPOINT, {method: 'POST', headers: {'Content-Type': 'application/json', Accept: 'application/json'}, body: JSON.stringify(payload(selected))});
+      const response = await fetch(ENDPOINT, {method: 'POST', headers: {Accept: 'application/json'}, body: payload(selected)});
       const result = await response.json().catch(() => ({}));
-      if (!response.ok || String(result.success) !== 'true') throw new Error('not sent');
+      if (typeof result.message === 'string' && result.message && !result.ok) failure = result.message;
+      if (!response.ok || !result.ok) throw new Error('not sent');
       sent = true;
       try { localStorage.setItem(key, '[]'); } catch {}
       $('order-confirmation').hidden = false; $('order-confirmation').focus();
     } catch {
-      showError('Je bestelling kon niet worden verstuurd. Probeer het opnieuw of mail ons via info@zoetgebaar.be.');
+      showError(failure);
     } finally {
       sending = false;
       $('review-order').textContent = 'Bestelling versturen';

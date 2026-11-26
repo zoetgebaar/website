@@ -48,41 +48,40 @@
           <div class="button-row"><a class="btn btn-outline" href="index.html?v=20261126-1">Terug naar de startpagina</a></div>
         </div>
 
-        <form class="form-card" id="business-form" action="https://formsubmit.co/info@zoetgebaar.be" method="POST" enctype="multipart/form-data" data-reveal>
-          <input type="hidden" name="_subject" value="Nieuwe aanvraag van een bedrijf via de website">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_next" value="">
-          <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+        <form class="form-card" id="business-form" action="api/send.php" method="POST" enctype="multipart/form-data" data-reveal>
+          <input type="hidden" name="type" value="bedrijf">
+          <input type="hidden" name="MAX_FILE_SIZE" value="5242880">
+          <input type="text" name="website" class="honey" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="form-grid">
-            <div class="field"><label for="bedrijf">Bedrijfsnaam</label><input id="bedrijf" name="Bedrijf" autocomplete="organization" required></div>
-            <div class="field"><label for="contact">Contactpersoon</label><input id="contact" name="Contactpersoon" autocomplete="name" required></div>
+            <div class="field"><label for="bedrijf">Bedrijfsnaam</label><input id="bedrijf" name="bedrijf" autocomplete="organization" required></div>
+            <div class="field"><label for="contact">Contactpersoon</label><input id="contact" name="contactpersoon" autocomplete="name" required></div>
             <div class="field"><label for="email">Mailadres</label><input id="email" name="email" type="email" autocomplete="email" required></div>
-            <div class="field"><label for="telefoon">Telefoonnummer <span class="optional">(optioneel)</span></label><input id="telefoon" name="Telefoon" type="tel" autocomplete="tel"></div>
-            <div class="field"><label for="aantal">Hoeveel doosjes?</label><input id="aantal" name="Aantal doosjes" type="number" min="1" max="5000" step="1" inputmode="numeric" required></div>
-            <div class="field"><label for="datum">Tegen wanneer? <span class="optional">(optioneel)</span></label><input id="datum" name="Gewenste datum" type="date"></div>
-            <div class="field"><label for="formaat">Formaat</label><select id="formaat" name="Formaat"><option>Weet ik nog niet</option><option>Klein doosje (350 gram)</option><option>Middelgroot doosje (500 gram)</option><option>Groot doosje (800 gram)</option><option>Een mix van formaten</option></select></div>
-            <div class="field"><label for="mix">Snoepmix</label><select id="mix" name="Snoepmix"><option>Weet ik nog niet</option><option>Met gelatine</option><option>Gelatinevrij</option><option>Allebei</option></select></div>
+            <div class="field"><label for="telefoon">Telefoonnummer <span class="optional">(optioneel)</span></label><input id="telefoon" name="telefoon" type="tel" autocomplete="tel"></div>
+            <div class="field"><label for="aantal">Hoeveel doosjes?</label><input id="aantal" name="aantal" type="number" min="1" max="5000" step="1" inputmode="numeric" required></div>
+            <div class="field"><label for="datum">Tegen wanneer? <span class="optional">(optioneel)</span></label><input id="datum" name="datum" type="date"></div>
+            <div class="field"><label for="formaat">Formaat</label><select id="formaat" name="formaat"><option>Weet ik nog niet</option><option>Klein doosje (350 gram)</option><option>Middelgroot doosje (500 gram)</option><option>Groot doosje (800 gram)</option><option>Een mix van formaten</option></select></div>
+            <div class="field"><label for="mix">Snoepmix</label><select id="mix" name="snoepmix"><option>Weet ik nog niet</option><option>Met gelatine</option><option>Gelatinevrij</option><option>Allebei</option></select></div>
             <fieldset class="full">
               <legend>Kleur van het lint</legend>
               <div class="swatches">
-                <label class="swatch"><input type="radio" name="Lintkleur" value="Rood" required><span style="--swatch:#b3312b">Rood</span></label>
-                <label class="swatch"><input type="radio" name="Lintkleur" value="Roze"><span style="--swatch:#e9a7b6">Roze</span></label>
-                <label class="swatch"><input type="radio" name="Lintkleur" value="Zwart"><span style="--swatch:#1f1a17">Zwart</span></label>
-                <label class="swatch"><input type="radio" name="Lintkleur" value="Goud"><span style="--swatch:#c9a24a">Goud</span></label>
-                <label class="swatch"><input type="radio" name="Lintkleur" value="Groen"><span style="--swatch:#2f5d3a">Groen</span></label>
-                <label class="swatch"><input type="radio" name="Lintkleur" value="Blauw"><span style="--swatch:#2d4f7c">Blauw</span></label>
-                <label class="swatch"><input type="radio" name="Lintkleur" value="Wit"><span style="--swatch:#f6f2ea">Wit</span></label>
-                <label class="swatch"><input type="radio" name="Lintkleur" value="Andere kleur"><span style="--swatch:conic-gradient(#b3312b,#c9a24a,#2f5d3a,#2d4f7c,#e9a7b6,#b3312b)">Andere kleur</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Rood" required><span style="--swatch:#b3312b">Rood</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Roze"><span style="--swatch:#e9a7b6">Roze</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Zwart"><span style="--swatch:#1f1a17">Zwart</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Goud"><span style="--swatch:#c9a24a">Goud</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Groen"><span style="--swatch:#2f5d3a">Groen</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Blauw"><span style="--swatch:#2d4f7c">Blauw</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Wit"><span style="--swatch:#f6f2ea">Wit</span></label>
+                <label class="swatch"><input type="radio" name="lintkleur" value="Andere kleur"><span style="--swatch:conic-gradient(#b3312b,#c9a24a,#2f5d3a,#2d4f7c,#e9a7b6,#b3312b)">Andere kleur</span></label>
               </div>
             </fieldset>
-            <div class="field full" id="other-color" hidden><label for="kleur-anders">Welke kleur?</label><input id="kleur-anders" name="Andere lintkleur" placeholder="Bijvoorbeeld onze huisstijlkleur #0a5c8f"></div>
-            <div class="field full"><label for="logo">Logo <span class="optional">(optioneel)</span></label><input id="logo" name="attachment" type="file" accept="image/png,image/jpeg,image/svg+xml,application/pdf"><p class="field-hint">PNG, JPG, SVG of PDF, maximaal 5 MB.</p><p class="field-error" id="logo-error" hidden>Dit bestand is groter dan 5 MB. Kies een kleiner bestand of mail het logo naar info@zoetgebaar.be.</p></div>
-            <div class="field full"><label for="bericht">Nog iets dat we moeten weten? <span class="optional">(optioneel)</span></label><textarea id="bericht" name="Bericht" rows="4"></textarea></div>
+            <div class="field full" id="other-color" hidden><label for="kleur-anders">Welke kleur?</label><input id="kleur-anders" name="lintkleur_anders" placeholder="Bijvoorbeeld onze huisstijlkleur #0a5c8f"></div>
+            <div class="field full"><label for="logo">Logo <span class="optional">(optioneel)</span></label><input id="logo" name="logo" type="file" accept="image/png,image/jpeg,image/svg+xml,application/pdf"><p class="field-hint">PNG, JPG, SVG of PDF, maximaal 5 MB.</p><p class="field-error" id="logo-error" hidden>Dit bestand is groter dan 5 MB. Kies een kleiner bestand of mail het logo naar info@zoetgebaar.be.</p></div>
+            <div class="field full"><label for="bericht">Nog iets dat we moeten weten? <span class="optional">(optioneel)</span></label><textarea id="bericht" name="bericht" rows="4"></textarea></div>
           </div>
           <div class="form-footer">
             <button class="btn" type="submit" id="business-submit">Aanvraag versturen <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <p class="field-hint">We gebruiken je gegevens alleen om je aanvraag te beantwoorden.</p>
+            <p class="field-error" id="business-error" role="alert" hidden></p>
           </div>
         </form>
       </div>
