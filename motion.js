@@ -74,7 +74,7 @@
     });
   }
 
-  // Endless marquee that speeds up and turns with the scroll direction.
+  // Endless marquee at one calm, steady pace (one loop every 38 seconds).
   function marquees() {
     $$('[data-marquee]').forEach(marquee => {
       const track = marquee.querySelector('.marquee-track');
@@ -83,22 +83,9 @@
       const clone = group.cloneNode(true);
       clone.setAttribute('aria-hidden', 'true');
       track.append(clone);
-      const wrap = gsap.utils.wrap(-50, 0);
-      const setX = gsap.quickSetter(track, 'xPercent');
-      let x = 0, direction = 1, boost = 0;
-      const base = 50 / 38; // percent per second: one loop every 38 seconds
-      gsap.ticker.add((time, delta) => {
-        x = wrap(x - direction * (base + boost) * delta / 1000);
-        setX(x);
-        boost *= .94;
-      });
-      ScrollTrigger.create({
-        trigger: marquee, start: 'top bottom', end: 'bottom top',
-        onUpdate: self => { direction = self.direction; boost = Math.min(Math.abs(self.getVelocity()) / 60, 30); },
-      });
+      gsap.to(track, {xPercent: -50, duration: 38, ease: 'none', repeat: -1});
     });
   }
-
 
   // Buttons lean gently towards the pointer.
   function magnetic() {

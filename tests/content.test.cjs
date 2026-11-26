@@ -7,7 +7,7 @@ const fixture = JSON.parse(fs.readFileSync('data/content.json', 'utf8'));
 const pageFiles = ['index.html', 'webshop.html', 'over-ons.html', 'bedrijven.html', 'goed-doel.html'];
 const pages = pageFiles.map(file => [file, fs.readFileSync(file, 'utf8')]);
 const order = fs.readFileSync('bestellen.html', 'utf8');
-const VERSION = '20261126-1';
+const VERSION = '20261126-2';
 // Visible text only: drop scripts, styles and tags.
 const visibleText = html => html.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<style[\s\S]*?<\/style>/g, ' ').replace(/<[^>]+>/g, ' ');
 
